@@ -6,11 +6,11 @@ namespace Game
     {
         #region Inspector
 
-        public float maxSpeed = 6f;
-        public float acceleration = 20.48f;
-        public float deceleration = 20.48f;
+        public float maxSpeed = 12f;
+        public float acceleration = 2048f;
+        public float deceleration = 2048f;
         public float rotationSpeed = 720f;
-        public float jumpVelocity = 7f;
+        public float jumpVelocity = 10f;
 
         #endregion
 
@@ -22,21 +22,48 @@ namespace Game
         public Vector3 Velocity { get; set; } = Vector3.zero;
         public Vector3 NormalizedVelocity => Velocity / maxSpeed;
         public bool IsGrounded { get; private set; } = false;
-        public bool IsJumping => rigidbodyComp.linearVelocity.y > 0f;
-        public bool IsFalling => !IsGrounded && rigidbodyComp.linearVelocity.y <= 0f;
+        public bool IsJumping { get; private set; } = false;
+        public bool IsFalling { get; private set; } = false;
+        private float _prevY = 0f;
 
         protected virtual void Awake()
         {
             rigidbodyComp = GetComponentInChildren<Rigidbody>();
-            capsule= GetComponentInChildren<CapsuleCollider>();
+            capsule = GetComponentInChildren<CapsuleCollider>();
             groundLayer = LayerMask.NameToLayer("Ground");
         }
 
         protected virtual void FixedUpdate()
         {
             CheckGround();
+            CheckJumpState();
             UpdateMovement();
             UpdateRotation();
+        }
+
+        /// <summary>
+        /// 점프 상태 체크
+        /// </summary>
+        private void CheckJumpState()
+        {
+            if (_prevY < rigidbodyComp.linearVelocity.y && rigidbodyComp.linearVelocity.y > 0f)
+            {
+                IsJumping = true;
+            }
+            else if (IsJumping)
+            {
+                if (rigidbodyComp.linearVelocity.y <= 0f)
+                {
+                    IsFalling = true;
+                    IsJumping = false;
+                }
+            }
+            else if (IsGrounded)
+            {
+                IsFalling = false;
+            }
+
+            _prevY = rigidbodyComp.linearVelocity.y;
         }
 
         /// <summary>
@@ -94,7 +121,6 @@ namespace Game
         public void Jump()
         {
             if (!IsGrounded) return;
-            
             rigidbodyComp.linearVelocity = new Vector3(rigidbodyComp.linearVelocity.x, jumpVelocity, rigidbodyComp.linearVelocity.z);
         }
     }

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Game
@@ -5,8 +6,8 @@ namespace Game
     public class PlayerController : SingletonBehaviour<PlayerController>
     {
         public bool IsPossessed { get; private set; } = false;
-        public Pawn _possessTarget = null;
-        public Pawn _lastPossessTarget = null;
+        private Pawn _possessTarget = null;
+        private Pawn _lastPossessTarget = null;
 
         private Transform _mainCameraTransform;
         private Movement _movement;
@@ -14,40 +15,11 @@ namespace Game
         private void Start()
         {
             _mainCameraTransform = Camera.main.transform;
-            Possess(_possessTarget);
         }
 
-        /// <summary>
-        /// 빙의
-        /// </summary>
-        public void Possess(Pawn pawn = null)
+        private void Update()
         {
-            if (pawn == null)
-            {
-                pawn = _lastPossessTarget;
-            }
-
-            Unpossess();
-            _possessTarget = pawn;
-            _lastPossessTarget = pawn;
-            _movement = _possessTarget.GetComponent<Movement>();
-            var playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
-            playerCameraController.Bind(pawn.GetComponentInChildren<SpringArm>());
-            IsPossessed = true;
-        }
-
-        /// <summary>
-        /// 빙의 해제
-        /// </summary>
-        public void Unpossess()
-        {
-            _movement = null;
-            IsPossessed = false;
-        }
-
-        protected virtual void Update()
-        {
-            if (!_possessTarget) return;
+            if (!IsPossessed) return;
 
             if (_movement)
             {
@@ -66,6 +38,37 @@ namespace Game
                     _movement.Jump();
                 }
             }
+        }
+
+        /// <summary>
+        /// 빙의
+        /// </summary>
+        public void Possess(Pawn pawn = null)
+        {
+            if (pawn == null)
+            {
+                pawn = _lastPossessTarget;
+            }
+
+            _possessTarget = pawn;
+            _lastPossessTarget = pawn;
+            _movement = _possessTarget.GetComponent<Movement>();
+            var playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
+            playerCameraController.Bind(pawn.GetComponentInChildren<SpringArm>());
+            IsPossessed = true;
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
+        /// <summary>
+        /// 빙의 해제
+        /// </summary>
+        public void Unpossess()
+        {
+            _movement = null;
+            IsPossessed = false;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
         }
     }
 }

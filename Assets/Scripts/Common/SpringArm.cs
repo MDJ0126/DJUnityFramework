@@ -20,11 +20,9 @@ public class SpringArm : MonoBehaviour
         set => cameraLocalRotation = value;
     }
 
-    public Vector3 CameraWorldPosition =>
-        transform.TransformPoint(cameraLocalPosition);
+    public Vector3 CameraWorldPosition => transform.TransformPoint(cameraLocalPosition);
 
-    public Quaternion CameraWorldRotation =>
-        transform.rotation * Quaternion.Euler(cameraLocalRotation);
+    public Quaternion CameraWorldRotation => transform.rotation * Quaternion.Euler(cameraLocalRotation);
 
     /// <summary>
     /// SpringArm에 설정된 초기 카메라 위치/회전을 적용

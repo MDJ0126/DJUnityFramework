@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c225b9b5e38881140b0838cb7977c68a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraLocalPosition: {x: 0, y: 5.659244, z: -13.367696}
-  cameraLocalRotation: {x: 10, y: 0, z: 0}
+  cameraLocalPosition: {x: 2, y: 4.5, z: -10}
+  cameraLocalRotation: {x: 5, y: 0, z: 0}
 --- !u!1 &9098493663144327543
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,11 +106,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2187480de068684c8ac7aec1bc4e410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 6
-  acceleration: 20.48
-  deceleration: 20.48
+  maxSpeed: 12
+  acceleration: 2048
+  deceleration: 2048
   rotationSpeed: 720
-  jumpVelocity: 7
+  jumpVelocity: 10
 --- !u!54 &7235554944948404841
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -136,7 +136,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!1001 &1090044456370707041
 PrefabInstance:
@@ -244,7 +244,7 @@ CapsuleCollider:
   m_Radius: 1
   m_Height: 5
   m_Direction: 1
-  m_Center: {x: 0, y: 2.4, z: 0.5}
+  m_Center: {x: 0, y: 2.5, z: 0.5}
 --- !u!4 &624351996092185994 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: db7dda6d77ebc5b4fa743cd4d7824de5, type: 3}

@@ -35,6 +35,14 @@ public class EditorPossessInput : MonoBehaviour
                 PlayerController.Instance.Possess();
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (PlayerController.Instance.IsPossessed)
+            {
+                PlayerController.Instance.Unpossess();
+            }
+        }
     }
 
 #endif

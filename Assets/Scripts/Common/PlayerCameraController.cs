@@ -1,7 +1,10 @@
+using Game;
 using UnityEngine;
 
 public class PlayerCameraController : MonoBehaviour
 {
+    #region Inspector
+
     [Header("Mouse")]
     [SerializeField]
     private float mouseSensitivity = 3f;
@@ -27,6 +30,8 @@ public class PlayerCameraController : MonoBehaviour
 
     [SerializeField]
     private float returnSmoothTime = 0.1f;
+
+    #endregion
 
     private SpringArm _springArm;
 
@@ -83,7 +88,6 @@ public class PlayerCameraController : MonoBehaviour
 
         UpdateRotation();
     }
-
     private void LateUpdate()
     {
         if (_springArm == null)
@@ -94,11 +98,13 @@ public class PlayerCameraController : MonoBehaviour
 
     private void UpdateRotation()
     {
+        if (!PlayerController.Instance || !PlayerController.Instance.IsPossessed) return;
+
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
 
         _yaw += mouseX * mouseSensitivity;
-        _pitch += mouseY * mouseSensitivity;
+        _pitch -= mouseY * mouseSensitivity;
 
         _pitch = Mathf.Clamp(
             _pitch,
@@ -109,23 +115,38 @@ public class PlayerCameraController : MonoBehaviour
 
     private void UpdateCamera()
     {
-        Quaternion mouseRotation = Quaternion.Euler(_pitch, _yaw, 0f);
+        Vector3 pivotPosition = _springArm.transform.position;
 
-        // 에디터에서 잡은 초기 Offset 자체를
-        // 마우스 회전만큼 Pivot 주위로 회전
-        Vector3 desiredOffset = mouseRotation * _initialOffset;
+        // Yaw는 항상 월드 Y축 기준
+        Quaternion yawRotation = Quaternion.AngleAxis(_yaw, Vector3.up);
+
+        // Yaw가 적용된 카메라 기준 Right축
+        Quaternion yawedRotation = yawRotation * _initialRotation;
+
+        Vector3 pitchAxis = yawedRotation * Vector3.right;
+
+        // Pitch는 현재 카메라의 Right축 기준
+        Quaternion pitchRotation = Quaternion.AngleAxis(_pitch, pitchAxis);
+
+        // 최종 Orbit 회전
+        Quaternion orbitRotation = pitchRotation * yawRotation;
+
+        // 위치와 회전에 동일한 Orbit Rotation 적용
+        Vector3 desiredOffset = orbitRotation * _initialOffset;
 
         float desiredDistance = desiredOffset.magnitude;
 
         if (desiredDistance <= Mathf.Epsilon)
         {
-            transform.SetPositionAndRotation(_springArm.transform.position, mouseRotation * _initialRotation);
+            transform.SetPositionAndRotation(
+                pivotPosition,
+                orbitRotation * _initialRotation
+            );
+
             return;
         }
 
         Vector3 direction = desiredOffset / desiredDistance;
-
-        Vector3 pivotPosition = _springArm.transform.position;
 
         float targetDistance = GetTargetDistance(
             pivotPosition,
@@ -135,8 +156,12 @@ public class PlayerCameraController : MonoBehaviour
 
         UpdateCameraDistance(targetDistance);
 
-        Vector3 cameraPosition = pivotPosition + direction * _currentDistance;
-        Quaternion cameraRotation = mouseRotation * _initialRotation;
+        Vector3 cameraPosition =
+            pivotPosition +
+            direction * _currentDistance;
+
+        Quaternion cameraRotation =
+            orbitRotation * _initialRotation;
 
         transform.SetPositionAndRotation(
             cameraPosition,
