@@ -33,7 +33,7 @@ public class PlayerCameraController : MonoBehaviour
 
     #endregion
 
-    private SpringArm _springArm;
+    public SpringArm SpringArm { get; private set; }
 
     // 빙의한 순간의 SpringArm 기준 카메라 월드 Offset
     private Vector3 _initialOffset;
@@ -57,17 +57,17 @@ public class PlayerCameraController : MonoBehaviour
         if (springArm == null)
             return;
 
-        _springArm = springArm;
+        this.SpringArm = springArm;
 
         // 에디터에서 잡아놓은 위치/회전으로 즉시 이동
-        _springArm.ApplyCameraSetting(transform);
+        this.SpringArm.ApplyCameraSetting(this);
 
         // SpringArm Pivot -> Camera
         // 빙의 순간의 월드 Offset을 저장
-        _initialOffset = _springArm.CameraWorldPosition - _springArm.transform.position;
+        _initialOffset = this.SpringArm.CameraWorldPosition - this.SpringArm.transform.position;
 
         // 캐릭터 회전은 빙의 순간에만 설정
-        _initialRotation = _springArm.CameraWorldRotation;
+        _initialRotation = this.SpringArm.CameraWorldRotation;
 
         _yaw = 0f;
         _pitch = 0f;
@@ -78,19 +78,20 @@ public class PlayerCameraController : MonoBehaviour
 
     public void Unbind()
     {
-        _springArm = null;
+        SpringArm = null;
     }
 
     private void Update()
     {
-        if (_springArm == null)
+        if (SpringArm == null)
             return;
 
         UpdateRotation();
     }
+
     private void LateUpdate()
     {
-        if (_springArm == null)
+        if (SpringArm == null)
             return;
 
         UpdateCamera();
@@ -115,7 +116,7 @@ public class PlayerCameraController : MonoBehaviour
 
     private void UpdateCamera()
     {
-        Vector3 pivotPosition = _springArm.transform.position;
+        Vector3 pivotPosition = SpringArm.transform.position;
 
         // Yaw는 항상 월드 Y축 기준
         Quaternion yawRotation = Quaternion.AngleAxis(_yaw, Vector3.up);

@@ -2,11 +2,15 @@ using UnityEngine;
 
 public class SpringArm : MonoBehaviour
 {
+    #region Inspector
+
     [SerializeField]
     private Vector3 cameraLocalPosition = new Vector3(0f, 1.5f, -4f);
 
     [SerializeField]
     private Vector3 cameraLocalRotation = new Vector3(10f, 0f, 0f);
+
+    #endregion
 
     public Vector3 CameraLocalPosition
     {
@@ -24,18 +28,43 @@ public class SpringArm : MonoBehaviour
 
     public Quaternion CameraWorldRotation => transform.rotation * Quaternion.Euler(cameraLocalRotation);
 
+    private PlayerCameraController _playerCameraController;
+
     /// <summary>
     /// SpringArm에 설정된 초기 카메라 위치/회전을 적용
     /// </summary>
-    public void ApplyCameraSetting(Transform cameraTransform)
+    public void ApplyCameraSetting(PlayerCameraController playerCameraController)
     {
-        cameraTransform.SetPositionAndRotation(
+        _playerCameraController = playerCameraController;
+        playerCameraController.transform.SetPositionAndRotation(
             CameraWorldPosition,
             CameraWorldRotation
         );
     }
 
 #if UNITY_EDITOR
+
+    private void OnValidate()
+    {
+        if (Application.isPlaying)
+        {
+            if (_playerCameraController)
+            {
+                if (_playerCameraController.SpringArm.Equals(this))
+                {
+                    _playerCameraController.Bind(this);
+                }
+            }
+        }
+        else
+        {
+            Camera.main.transform.SetPositionAndRotation(
+                CameraWorldPosition,
+                CameraWorldRotation
+            );
+        }
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.DrawLine(
@@ -63,5 +92,6 @@ public class SpringArm : MonoBehaviour
 
         Gizmos.matrix = previousMatrix;
     }
+
 #endif
 }

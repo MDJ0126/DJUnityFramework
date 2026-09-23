@@ -23,20 +23,27 @@ namespace Game
 
             if (_movement)
             {
+                // 이동
                 float horizontal = Input.GetAxis("Horizontal");
                 float vertical = Input.GetAxis("Vertical");
 
                 Vector3 cameraForward = Vector3.ProjectOnPlane(_mainCameraTransform.forward, Vector3.up).normalized;
                 Vector3 cameraRight = Vector3.Cross(Vector3.up, cameraForward).normalized;
                 Vector2 input = Vector2.ClampMagnitude(new Vector2(horizontal, vertical), 1f);
-
                 _movement.MoveInput = cameraForward * input.y + cameraRight * input.x;
 
+                // 점프
                 bool isJump = Input.GetKeyUp(KeyCode.Space);
                 if (isJump)
                 {
                     _movement.Jump();
                 }
+
+                // 좌클릭
+
+
+
+                // 우클릭
             }
         }
 
