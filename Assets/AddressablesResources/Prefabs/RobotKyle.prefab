@@ -106,9 +106,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2187480de068684c8ac7aec1bc4e410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 12
-  acceleration: 2048
-  deceleration: 2048
+  maxSpeed: 10
+  walkMaxSpeed: 3
+  acceleration: 100
+  deceleration: 150
   rotationSpeed: 720
   jumpVelocity: 10
 --- !u!54 &7235554944948404841
@@ -252,6 +253,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2f083c5b4f5cb743b2014c2734d03ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  footRayStartHeight: 0.5
+  footRayDistance: 1
+  footOffset: 0.13
+  ikPositionWeight: 1
+  ikRotationWeight: 0.8
+  maxBodyDrop: 0.25
+  bodyAdjustSpeed: 8
 --- !u!136 &852963316712483292
 CapsuleCollider:
   m_ObjectHideFlags: 0

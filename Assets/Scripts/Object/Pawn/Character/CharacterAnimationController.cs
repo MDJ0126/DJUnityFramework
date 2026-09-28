@@ -20,7 +20,7 @@ namespace Game
 
         private void Update()
         {
-            _boneAnimator.SetFloat("Velocity", _owner.Movement.NormalizedVelocity.magnitude);
+            _boneAnimator.SetFloat("Velocity", _owner.Movement.NormalizedVelocity);
             _boneAnimator.SetBool("IsJumping", _movement.IsJumping);
             _boneAnimator.SetBool("IsFalling", _movement.IsFalling);
         }

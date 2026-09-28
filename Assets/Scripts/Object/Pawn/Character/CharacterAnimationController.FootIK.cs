@@ -41,7 +41,7 @@ namespace Game
                 _movement.IsGrounded &&
                 !_movement.IsJumping &&
                 !_movement.IsFalling &&
-                _owner.Movement.NormalizedVelocity.sqrMagnitude < 0.001f;
+                _owner.Movement.NormalizedVelocity < 0.001f;
 
             if (!isIdle)
             {

@@ -6,9 +6,10 @@ namespace Game
     {
         #region Inspector
 
-        public float maxSpeed = 12f;
-        public float acceleration = 2048f;
-        public float deceleration = 2048f;
+        public float maxSpeed = 10f;
+        public float walkMaxSpeed = 3f;
+        public float acceleration = 100f;
+        public float deceleration = 150f;
         public float rotationSpeed = 720f;
         public float jumpVelocity = 10f;
 
@@ -20,10 +21,20 @@ namespace Game
 
         public Vector3 MoveInput { get; set; } = Vector3.zero;
         public Vector3 Velocity { get; set; } = Vector3.zero;
-        public Vector3 NormalizedVelocity => Velocity / maxSpeed;
+        public float NormalizedVelocity
+        {
+            get
+            {
+                Vector3 horizontalVelocity = Velocity;
+                horizontalVelocity.y = 0f;
+                return horizontalVelocity.magnitude / maxSpeed;
+            }
+        }
+
         public bool IsGrounded { get; private set; } = false;
         public bool IsJumping { get; private set; } = false;
         public bool IsFalling { get; private set; } = false;
+        public bool IsSprint { get; set; } = false;
 
         protected virtual void Awake()
         {
@@ -45,15 +56,15 @@ namespace Game
         /// </summary>
         private void CheckJumpState()
         {
-            if (IsJumping)
+            //if (IsJumping)
             {
-                if (rigidbodyComp.linearVelocity.y <= 0f)
+                if (rigidbodyComp.linearVelocity.y < 0.2f)
                 {
                     IsJumping = false;
                     IsFalling = true;
                 }
             }
-            else if (IsFalling)
+            if (IsFalling)
             {
                 if (IsGrounded)
                 {
@@ -98,8 +109,10 @@ namespace Game
                 // 이동 입력 백터와 법선 백터를 이용한 경사로 백터
                 Vector3 slopeMoveDir = Vector3.ProjectOnPlane(inputDir, hit.normal).normalized;
 
+                float speed = IsSprint ? maxSpeed : walkMaxSpeed;
+
                 // 경사로 백터를 반영한다.
-                Vector3 targetVelocity = slopeMoveDir * maxSpeed * Mathf.Clamp01(MoveInput.magnitude);
+                Vector3 targetVelocity = slopeMoveDir * speed * Mathf.Clamp01(MoveInput.magnitude);
 
                 float accel = MoveInput.sqrMagnitude > 0f ? acceleration : deceleration;
 

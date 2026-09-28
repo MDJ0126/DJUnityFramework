@@ -31,6 +31,7 @@ namespace Game
                 Vector3 cameraRight = Vector3.Cross(Vector3.up, cameraForward).normalized;
                 Vector2 input = Vector2.ClampMagnitude(new Vector2(horizontal, vertical), 1f);
                 _movement.MoveInput = cameraForward * input.y + cameraRight * input.x;
+                _movement.IsSprint = Input.GetKey(KeyCode.LeftShift);
 
                 // 점프
                 bool isJump = Input.GetKeyUp(KeyCode.Space);
