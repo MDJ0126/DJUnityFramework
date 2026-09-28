@@ -7,14 +7,16 @@ namespace Game
     {
         #region Inspector
 
+        [Header("Foot IK")]
         [SerializeField] private float footRayStartHeight = 0.5f;
         [SerializeField] private float footRayDistance = 1.0f;
-        [SerializeField] private float footOffset = 0.05f;
-        [SerializeField] private float maxFootHeight = 0.15f;
+        [SerializeField] private float footOffset = 0.13f;
+        [SerializeField] private float ikPositionWeight = 1.0f;
+        [SerializeField] private float ikRotationWeight = 0.8f;
 
-        [SerializeField, Range(0f, 1f)] private float ikPositionWeight = 0.35f;
-        [SerializeField, Range(0f, 1f)] private float ikRotationWeight = 0.8f;
-        [SerializeField] private float ikBlendSpeed = 10f;
+        [Header("Body Offset")]
+        [SerializeField] private float maxBodyDrop = 0.25f;
+        [SerializeField] private float bodyAdjustSpeed = 8f;
 
         #endregion
 
@@ -23,8 +25,17 @@ namespace Game
         private Movement _movement;
         private LayerMask _groundLayer;
 
-        private float _leftFootIKWeight;
-        private float _rightFootIKWeight;
+        private float _currentBodyOffset;
+
+        private struct FootIKData
+        {
+            public bool isHit;
+            public Vector3 footPosition;
+            public Quaternion footRotation;
+            public Vector3 targetPosition;
+            public Quaternion targetRotation;
+            public float groundGap;
+        }
 
         private void Awake()
         {
@@ -43,91 +54,109 @@ namespace Game
 
         private void OnAnimatorIK(int layerIndex)
         {
-            if (!_boneAnimator) return;
+            if (!_boneAnimator)
+                return;
 
-            UpdateFootIK(AvatarIKGoal.LeftFoot);
-            UpdateFootIK(AvatarIKGoal.RightFoot);
+            bool isIdle =
+                _movement.IsGrounded &&
+                !_movement.IsJumping &&
+                !_movement.IsFalling &&
+                _owner.Movement.NormalizedVelocity.sqrMagnitude < 0.001f;
+
+            if (!isIdle)
+            {
+                ResetIK();
+                return;
+            }
+
+            FootIKData leftFoot = CalculateFootIK(AvatarIKGoal.LeftFoot);
+            FootIKData rightFoot = CalculateFootIK(AvatarIKGoal.RightFoot);
+
+            UpdateBodyPosition(leftFoot, rightFoot);
+
+            ApplyFootIK(AvatarIKGoal.LeftFoot, leftFoot);
+            ApplyFootIK(AvatarIKGoal.RightFoot, rightFoot);
         }
 
-        private void UpdateFootIK(AvatarIKGoal foot)
+        private FootIKData CalculateFootIK(AvatarIKGoal foot)
         {
-            Vector3 footPosition = _boneAnimator.GetIKPosition(foot);
-            Quaternion footRotation = _boneAnimator.GetIKRotation(foot);
+            FootIKData data = new FootIKData();
 
-            Vector3 rayOrigin = footPosition + Vector3.up * footRayStartHeight;
+            data.footPosition = _boneAnimator.GetIKPosition(foot);
+            data.footRotation = _boneAnimator.GetIKRotation(foot);
+
+            Vector3 rayOrigin = data.footPosition + Vector3.up * footRayStartHeight;
             float rayDistance = footRayStartHeight + footRayDistance;
 
-            //Debug.DrawRay(rayOrigin, Vector3.down * rayDistance, Color.yellow);
+            Debug.DrawRay(rayOrigin, Vector3.down * rayDistance, Color.yellow);
 
-            bool isHit = Physics.Raycast(
-                rayOrigin,
-                Vector3.down,
-                out RaycastHit hit,
-                rayDistance,
-                _groundLayer,
-                QueryTriggerInteraction.Ignore
-            );
+            if (!Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, rayDistance, _groundLayer, QueryTriggerInteraction.Ignore))
+                return data;
 
-            if (!isHit)
-            {
-                float weight = UpdateIKWeight(foot, false);
-                ApplyIKWeight(foot, weight);
-                return;
-            }
+            data.isHit = true;
 
             float groundY = hit.point.y + footOffset;
-            float heightDifference = footPosition.y - groundY;
 
-            bool shouldApplyIK = heightDifference <= maxFootHeight;
-            float ikWeight = UpdateIKWeight(foot, shouldApplyIK);
+            data.targetPosition = data.footPosition;
+            data.targetPosition.y = groundY;
 
-            ApplyIKWeight(foot, ikWeight);
-
-            if (!shouldApplyIK)
-                return;
-
-            Vector3 targetPosition = footPosition;
-            targetPosition.y = groundY;
-
-            Quaternion targetRotation = Quaternion.FromToRotation(
-                footRotation * Vector3.up,
+            data.targetRotation = Quaternion.FromToRotation(
+                data.footRotation * Vector3.up,
                 hit.normal
-            ) * footRotation;
+            ) * data.footRotation;
 
-            _boneAnimator.SetIKPosition(foot, targetPosition);
-            _boneAnimator.SetIKRotation(foot, targetRotation);
+            data.groundGap = Mathf.Max(0f, data.footPosition.y - groundY);
 
             Debug.DrawRay(hit.point, hit.normal * 0.3f, Color.green);
+
+            return data;
         }
 
-        private float UpdateIKWeight(AvatarIKGoal foot, bool active)
+        private void UpdateBodyPosition(FootIKData leftFoot, FootIKData rightFoot)
         {
-            float targetWeight = active ? 1f : 0f;
+            float leftGap = leftFoot.isHit ? leftFoot.groundGap : 0f;
+            float rightGap = rightFoot.isHit ? rightFoot.groundGap : 0f;
 
-            if (foot == AvatarIKGoal.LeftFoot)
-            {
-                _leftFootIKWeight = Mathf.MoveTowards(
-                    _leftFootIKWeight,
-                    targetWeight,
-                    ikBlendSpeed * Time.deltaTime
-                );
+            float maxGap = Mathf.Max(leftGap, rightGap);
+            float targetOffset = -Mathf.Min(maxGap, maxBodyDrop);
 
-                return _leftFootIKWeight;
-            }
-
-            _rightFootIKWeight = Mathf.MoveTowards(
-                _rightFootIKWeight,
-                targetWeight,
-                ikBlendSpeed * Time.deltaTime
+            _currentBodyOffset = Mathf.Lerp(
+                _currentBodyOffset,
+                targetOffset,
+                bodyAdjustSpeed * Time.deltaTime
             );
 
-            return _rightFootIKWeight;
+            Vector3 bodyPosition = _boneAnimator.bodyPosition;
+            bodyPosition.y += _currentBodyOffset;
+            _boneAnimator.bodyPosition = bodyPosition;
         }
 
-        private void ApplyIKWeight(AvatarIKGoal foot, float weight)
+        private void ApplyFootIK(AvatarIKGoal foot, FootIKData data)
+        {
+            if (!data.isHit)
+            {
+                SetFootIKWeight(foot, 0f);
+                return;
+            }
+
+            SetFootIKWeight(foot, 1f);
+
+            _boneAnimator.SetIKPosition(foot, data.targetPosition);
+            _boneAnimator.SetIKRotation(foot, data.targetRotation);
+        }
+
+        private void SetFootIKWeight(AvatarIKGoal foot, float weight)
         {
             _boneAnimator.SetIKPositionWeight(foot, weight * ikPositionWeight);
             _boneAnimator.SetIKRotationWeight(foot, weight * ikRotationWeight);
+        }
+
+        private void ResetIK()
+        {
+            _currentBodyOffset = 0f;
+
+            SetFootIKWeight(AvatarIKGoal.LeftFoot, 0f);
+            SetFootIKWeight(AvatarIKGoal.RightFoot, 0f);
         }
     }
 }
