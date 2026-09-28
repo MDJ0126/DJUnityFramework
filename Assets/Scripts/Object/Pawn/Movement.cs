@@ -24,13 +24,12 @@ namespace Game
         public bool IsGrounded { get; private set; } = false;
         public bool IsJumping { get; private set; } = false;
         public bool IsFalling { get; private set; } = false;
-        private float _prevY = 0f;
 
         protected virtual void Awake()
         {
             rigidbodyComp = GetComponentInChildren<Rigidbody>();
             capsule = GetComponentInChildren<CapsuleCollider>();
-            groundLayer = LayerMask.NameToLayer("Ground");
+            groundLayer = LayerMask.GetMask("Ground");
         }
 
         protected virtual void FixedUpdate()
@@ -46,24 +45,21 @@ namespace Game
         /// </summary>
         private void CheckJumpState()
         {
-            if (_prevY < rigidbodyComp.linearVelocity.y && rigidbodyComp.linearVelocity.y > 0f)
-            {
-                IsJumping = true;
-            }
-            else if (IsJumping)
+            if (IsJumping)
             {
                 if (rigidbodyComp.linearVelocity.y <= 0f)
                 {
-                    IsFalling = true;
                     IsJumping = false;
+                    IsFalling = true;
                 }
             }
-            else if (IsGrounded)
+            else if (IsFalling)
             {
-                IsFalling = false;
+                if (IsGrounded)
+                {
+                    IsFalling = false;
+                }
             }
-
-            _prevY = rigidbodyComp.linearVelocity.y;
         }
 
         /// <summary>
@@ -80,7 +76,7 @@ namespace Game
             IsGrounded = Physics.CheckSphere(
                 groundCheckPosition,
                 capsule.radius,
-                1 << groundLayer,
+                groundLayer,
                 QueryTriggerInteraction.Ignore
             );
         }
@@ -90,12 +86,31 @@ namespace Game
         /// </summary>
         private void UpdateMovement()
         {
-            if (!IsGrounded) return;
+            if (!IsGrounded || IsJumping)
+                return;
 
-            Vector3 targetVelocity = MoveInput * maxSpeed;
-            float accel = MoveInput.sqrMagnitude > 0f ? acceleration : deceleration;
-            Velocity = Vector3.MoveTowards(Velocity, targetVelocity, accel * Time.fixedDeltaTime);
-            rigidbodyComp.linearVelocity = new Vector3(Velocity.x, rigidbodyComp.linearVelocity.y, Velocity.z);
+            Ray ray = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
+            if (Physics.Raycast(ray, out RaycastHit hit, 1.2f, groundLayer))
+            {
+                // 이동 입력 백터
+                Vector3 inputDir = MoveInput.normalized;
+
+                // 이동 입력 백터와 법선 백터를 이용한 경사로 백터
+                Vector3 slopeMoveDir = Vector3.ProjectOnPlane(inputDir, hit.normal).normalized;
+
+                // 경사로 백터를 반영한다.
+                Vector3 targetVelocity = slopeMoveDir * maxSpeed * Mathf.Clamp01(MoveInput.magnitude);
+
+                float accel = MoveInput.sqrMagnitude > 0f ? acceleration : deceleration;
+
+                Velocity = Vector3.MoveTowards(
+                    Velocity,
+                    targetVelocity,
+                    accel * Time.fixedDeltaTime
+                );
+
+                rigidbodyComp.linearVelocity = Velocity;
+            }
         }
 
         /// <summary>
@@ -121,7 +136,14 @@ namespace Game
         public void Jump()
         {
             if (!IsGrounded) return;
-            rigidbodyComp.linearVelocity = new Vector3(rigidbodyComp.linearVelocity.x, jumpVelocity, rigidbodyComp.linearVelocity.z);
+
+            Vector3 velocity = rigidbodyComp.linearVelocity;
+            velocity.y = jumpVelocity;
+
+            rigidbodyComp.linearVelocity = velocity;
+
+            IsJumping = true;
+            IsFalling = false;
         }
     }
 }

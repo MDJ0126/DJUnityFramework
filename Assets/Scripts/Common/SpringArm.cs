@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class SpringArm : MonoBehaviour
@@ -58,10 +59,26 @@ public class SpringArm : MonoBehaviour
         }
         else
         {
-            Camera.main.transform.SetPositionAndRotation(
-                CameraWorldPosition,
-                CameraWorldRotation
-            );
+            if (this.gameObject.activeInHierarchy)
+                StartCoroutine(DelayUpdate());
+        }
+
+        IEnumerator DelayUpdate()
+        {
+            yield return null;
+
+            var parentPawn = GetComponentInParent<Game.Pawn>();
+            if (parentPawn && GameMode.Instance.defaultPawn && GameMode.Instance.defaultPawn.Equals(parentPawn))
+            {
+                Camera mainCamera = Camera.main;
+                if (mainCamera)
+                {
+                    mainCamera.transform.SetPositionAndRotation(
+                        CameraWorldPosition,
+                        CameraWorldRotation
+                    );
+                }
+            }
         }
     }
 
