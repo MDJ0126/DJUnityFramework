@@ -660,7 +660,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9525701462d2fb48beab45fd1a59128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultPawn: {fileID: 961145565}
+  defaultPawn: {fileID: 426311102}
   playerController: {fileID: 401872643}
 --- !u!4 &331143806
 Transform:
@@ -727,6 +727,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 331143806}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &426311102 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7321475587468510620, guid: 4d1ea456a7aa8674097418264d9434cd, type: 3}
+  m_PrefabInstance: {fileID: 970166910}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37b3ff61ef67b440a38b80fc20a656e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &460825913 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8718778828885884488, guid: e5f4daf24146ee040b5a2d7a73b30aa0, type: 3}
@@ -949,7 +960,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8718778828885884488, guid: e5f4daf24146ee040b5a2d7a73b30aa0, type: 3}
   m_PrefabInstance: {fileID: 3710355326643663066}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &961145564
+--- !u!1001 &970166910
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1006,17 +1017,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d1ea456a7aa8674097418264d9434cd, type: 3}
---- !u!114 &961145565 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6965599179393621359, guid: 4d1ea456a7aa8674097418264d9434cd, type: 3}
-  m_PrefabInstance: {fileID: 961145564}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 294148341f0db2149aac886e5f9fab31, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1019773826 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2093637950428003362, guid: e5d7b87d422ee0f478ee09eb32e24f4e, type: 3}
@@ -3710,4 +3710,4 @@ SceneRoots:
   - {fileID: 2114283753834967213}
   - {fileID: 1327619677}
   - {fileID: 252501750}
-  - {fileID: 961145564}
+  - {fileID: 970166910}

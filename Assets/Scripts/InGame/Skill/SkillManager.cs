@@ -4,7 +4,22 @@ namespace Game
 {
     public class SkillManager
     {
+        private Pawn _owner = null;
+
         public List<Skill> Skills { get; private set; } = new();
+
+        public void SetOwner(Pawn owner)
+        {
+            _owner = owner;
+        }
+
+        public void UpdateTick(float deltaTime)
+        {
+            foreach (Skill skill in Skills)
+            {
+                skill.UpdateTick(deltaTime);
+            }
+        }
 
         /// <summary>
         /// 스킬 추가
@@ -12,6 +27,7 @@ namespace Game
         /// <param name="skill"></param>
         public void AddSkill(Skill skill)
         {
+            skill.SetOwner(_owner);
             Skills.Add(skill);
         }
 
