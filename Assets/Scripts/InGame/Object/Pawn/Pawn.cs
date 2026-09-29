@@ -1,6 +1,6 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace Game
 {
@@ -8,6 +8,9 @@ namespace Game
     {
         #region Inspector
 
+        public Transform aimTarget;
+        public MultiAimConstraint headAim;
+        public MultiAimConstraint spineAim;
         public WidgetAnchor nameAnchor;
         public WidgetAnchor balloonAnchor;
         public WidgetAnchor healthBarAnchor;
@@ -17,13 +20,17 @@ namespace Game
         public StatusInfo StatusInfo = new();
         public SkillManager SkillManager { get; private set; } = new();
         public BuffManager BuffManager { get; private set; } = new();
-        public Movement Movement { get; set; }
+        public Movement Movement { get; private set; }
+        public AnimationController AnimationController { get; private set; }
         protected List<FollowHUD> followHUDs = new();
+        public Vector3 AimTargetDefault { get; private set; }
 
         protected override void Awake()
         {
             base.Awake();
             Movement = GetComponent<Movement>();
+            AnimationController = GetComponentInChildren<AnimationController>();
+            AimTargetDefault = aimTarget.localPosition;
         }
 
         protected override void Start()
@@ -38,6 +45,11 @@ namespace Game
             base.LateUpdate();
             SkillManager.UpdateTick(Time.deltaTime);
             BuffManager.UpdateTick(Time.deltaTime);
+        }
+
+        public void ResetAimTargetPosition()
+        {
+            aimTarget.localPosition = AimTargetDefault;
         }
     }
 }

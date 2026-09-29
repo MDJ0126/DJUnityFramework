@@ -1,12 +1,21 @@
-using System.Collections;
 using UnityEngine;
 
 namespace Game
 {
     public class PlayerController : SingletonBehaviour<PlayerController>
     {
+        #region Inspector
+
+        [ReadOnly] [SerializeField] private Pawn _possessTarget = null;
+
+        [Header("Aim Settings")]
+        [ReadOnly][SerializeField] private Transform _aimTarget = null;
+        public float aimDistance = 100f;
+        public LayerMask aimMask;
+
+        #endregion
+
         public bool IsPossessed { get; private set; } = false;
-        private Pawn _possessTarget = null;
         private Pawn _lastPossessTarget = null;
 
         private Transform _mainCameraTransform;
@@ -41,10 +50,47 @@ namespace Game
                 }
 
                 // 좌클릭
-
+                if (Input.GetMouseButton(0))
+                {
+                    _possessTarget.AnimationController.PlayActionTest();
+                }
 
 
                 // 우클릭
+            }
+        }
+
+        private void LateUpdate()
+        {
+            UpdateAimTarget();
+        }
+
+        /// <summary>
+        /// 에임 타겟 업데이트
+        /// </summary>
+        private void UpdateAimTarget()
+        {
+            if (_aimTarget)
+            {
+                if (_possessTarget.Movement.IsSprint)
+                {
+                    _possessTarget.spineAim.weight = 0f;
+                }
+                else
+                {
+                    _possessTarget.spineAim.weight = 1f;
+                }
+
+                Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+
+                if (Physics.Raycast(ray, out var hit, aimDistance, aimMask))
+                {
+                    _aimTarget.position = hit.point;
+                }
+                else
+                {
+                    _aimTarget.position = ray.GetPoint(aimDistance);
+                }
             }
         }
 
@@ -60,6 +106,7 @@ namespace Game
 
             _possessTarget = pawn;
             _lastPossessTarget = pawn;
+            _aimTarget = pawn.aimTarget;
             _movement = _possessTarget.GetComponent<Movement>();
             var playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
             playerCameraController.Bind(pawn.GetComponentInChildren<SpringArm>());
@@ -73,10 +120,13 @@ namespace Game
         /// </summary>
         public void Unpossess()
         {
+            _possessTarget.ResetAimTargetPosition();
+            _aimTarget = null;
             _movement = null;
             IsPossessed = false;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
+            _possessTarget = null;
         }
     }
 }

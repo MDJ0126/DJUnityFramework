@@ -893,6 +893,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6433ad57ed5141a488ae6913ac8a219b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _possessTarget: {fileID: 0}
+  _aimTarget: {fileID: 0}
+  aimDistance: 100
+  aimMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!4 &401872644
 Transform:
   m_ObjectHideFlags: 0

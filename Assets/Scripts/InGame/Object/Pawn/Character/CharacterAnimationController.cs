@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Game
 {
     [RequireComponent(typeof(Animator))]
-    public partial class CharacterAnimationController : MonoBehaviour
+    public partial class CharacterAnimationController : AnimationController
     {
         private Character _owner;
         private Animator _boneAnimator;
@@ -23,6 +23,12 @@ namespace Game
             _boneAnimator.SetFloat("Velocity", _owner.Movement.NormalizedVelocity);
             _boneAnimator.SetBool("IsJumping", _movement.IsJumping);
             _boneAnimator.SetBool("IsFalling", _movement.IsFalling);
+        }
+
+        public override void PlayActionTest()
+        {
+            base.PlayActionTest();
+            _boneAnimator.SetTrigger("ActionTest");
         }
     }
 }

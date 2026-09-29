@@ -1,9 +1,12 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Game
 {
     public abstract class Movement : MonoBehaviour
     {
+        private const float CAN_JUMP_TIME = 0.2f;
+
         #region Inspector
 
         public float maxSpeed = 10f;
@@ -11,7 +14,7 @@ namespace Game
         public float acceleration = 100f;
         public float deceleration = 150f;
         public float rotationSpeed = 720f;
-        public float jumpVelocity = 10f;
+        public float jumpVelocity = 7f;
 
         #endregion
 
@@ -32,6 +35,7 @@ namespace Game
         }
 
         public bool IsGrounded { get; private set; } = false;
+        public bool IsCanJump { get; private set; } = false;
         public bool IsJumping { get; private set; } = false;
         public bool IsFalling { get; private set; } = false;
         public bool IsSprint { get; set; } = false;
@@ -84,12 +88,31 @@ namespace Game
                 capsule.bounds.center.z
             );
 
-            IsGrounded = Physics.CheckSphere(
+            bool isGrounded = Physics.CheckSphere(
                 groundCheckPosition,
                 capsule.radius,
                 groundLayer,
                 QueryTriggerInteraction.Ignore
             );
+
+            if (IsGrounded != isGrounded)
+            {
+                IsGrounded = isGrounded;
+                if (!isGrounded)
+                {
+                    if (!IsJumping)
+                    {
+                        IsCanJump = true;
+                        StartCoroutine(DelayCantJump());
+                    }
+                }
+            }
+
+            IEnumerator DelayCantJump()
+            {
+                yield return YieldInstructionCache.WaitForSeconds(CAN_JUMP_TIME);
+                IsCanJump = false;
+            }
         }
 
         /// <summary>
@@ -131,7 +154,8 @@ namespace Game
         /// </summary>
         private void UpdateRotation()
         {
-            Vector3 direction = MoveInput;
+            Vector3 direction;
+            direction = MoveInput;
 
             // Yaw 축만 사용하기
             direction.y = 0f;
@@ -148,7 +172,7 @@ namespace Game
         /// </summary>
         public void Jump()
         {
-            if (!IsGrounded) return;
+            if (!IsGrounded && !IsCanJump) return;
 
             Vector3 velocity = rigidbodyComp.linearVelocity;
             velocity.y = jumpVelocity;
@@ -157,6 +181,11 @@ namespace Game
 
             IsJumping = true;
             IsFalling = false;
+
+            if (!IsGrounded && IsCanJump)
+            {
+                IsCanJump = false;
+            }
         }
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Game
 {
     [RequireComponent(typeof(Animator))]
-    public partial class CharacterAnimationController : MonoBehaviour
+    public partial class CharacterAnimationController
     {
         #region Inspector
 
