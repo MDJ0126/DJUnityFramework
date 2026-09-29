@@ -1,3 +1,84 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Reflection;
+using UnityEngine;
+
 public static class Utils
 {
+    /// <summary>
+    /// 오브젝트를 비추고 있는 카메라 가져오기
+    /// </summary>
+    /// <returns></returns>
+    public static Camera GetMyCamera(GameObject gameObject)
+    {
+        foreach (Camera camera in Camera.allCameras)
+        {
+            var cullingMask = 1 << gameObject.layer;
+            if ((camera.cullingMask & cullingMask) != 0)
+                return camera;
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// 레이어 마스크 반환
+    /// </summary>
+    public static int GetLayerMask(eLayer layer)
+    {
+        return 1 << (int)layer;
+    }
+
+    /// <summary>
+    /// 확률 입력하면 true/false 반환
+    /// </summary>
+    /// <param name="percentNormalize">0~1</param>
+    /// <returns>true or false</returns>
+    public static bool GetToggleRandom(float percentNormalize)
+    {
+        return UnityEngine.Random.Range(0, 1f) < percentNormalize;
+    }
+
+    /// <summary>
+    /// 런타임 중 특정 오브젝트 모두 찾기
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static List<T> FindAllObjects<T>() where T : UnityEngine.Object
+    {
+        List<T> objects = new List<T>();
+        for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++)
+        {
+            var scene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(i);
+            if (scene.isLoaded)
+            {
+                var rootObject = scene.GetRootGameObjects();
+                for (int j = 0; j < rootObject.Length; j++)
+                {
+                    var go = rootObject[j];
+                    objects.AddRange(go.GetComponentsInChildren<T>(true));
+                }
+            }
+        }
+        return objects;
+    }
+
+    /// <summary>
+	/// Enum 확장메소드, Description 읽어오기
+	/// </summary>
+	/// <param name="source"></param>
+	/// <returns></returns>
+	public static string ToDescription(this Enum source)
+    {
+        FieldInfo fi = source.GetType().GetField(source.ToString());
+        var att = (DescriptionAttribute)fi.GetCustomAttribute(typeof(DescriptionAttribute));
+        if (att != null)
+        {
+            return att.Description;
+        }
+        else
+        {
+            return source.ToString();
+        }
+    }
 }

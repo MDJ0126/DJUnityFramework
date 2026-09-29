@@ -4,6 +4,9 @@ namespace Game
 {
     public abstract class BaseObject : MonoBehaviour
     {
+        private static int _createIndex = 0;
+        public int Index { get; private set; } = 0;
+
         private Transform _transform;
 
         public Transform Transform
@@ -16,7 +19,11 @@ namespace Game
             }
         }
 
-        protected virtual void Awake() { }
+        protected virtual void Awake() 
+        {
+            Index = _createIndex++;
+        }
+
         protected virtual void Start() { }
         protected virtual void OnEnable() { }
         protected virtual void OnDisable() { }
