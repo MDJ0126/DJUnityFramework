@@ -124,28 +124,39 @@ namespace Game
                 return;
 
             Ray ray = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
+
             if (Physics.Raycast(ray, out RaycastHit hit, 1.2f, groundLayer))
             {
-                // 이동 입력 백터
                 Vector3 inputDir = MoveInput.normalized;
 
-                // 이동 입력 백터와 법선 백터를 이용한 경사로 백터
                 Vector3 slopeMoveDir = Vector3.ProjectOnPlane(inputDir, hit.normal).normalized;
 
                 float speed = IsSprint ? maxSpeed : walkMaxSpeed;
 
-                // 경사로 백터를 반영한다.
                 Vector3 targetVelocity = slopeMoveDir * speed * Mathf.Clamp01(MoveInput.magnitude);
 
                 float accel = MoveInput.sqrMagnitude > 0f ? acceleration : deceleration;
 
-                Velocity = Vector3.MoveTowards(
-                    Velocity,
-                    targetVelocity,
+                // 현재 Rigidbody의 Y 속도는 건드리지 않는다.
+                Vector3 currentVelocity = rigidbodyComp.linearVelocity;
+
+                Vector3 currentHorizontalVelocity = new Vector3(currentVelocity.x, 0f, currentVelocity.z);
+
+                Vector3 targetHorizontalVelocity = new Vector3(targetVelocity.x, 0f, targetVelocity.z);
+
+                Vector3 horizontalVelocity = Vector3.MoveTowards(
+                    currentHorizontalVelocity,
+                    targetHorizontalVelocity,
                     accel * Time.fixedDeltaTime
                 );
 
-                rigidbodyComp.linearVelocity = Velocity;
+                Velocity = horizontalVelocity;
+
+                rigidbodyComp.linearVelocity = new Vector3(
+                    horizontalVelocity.x,
+                    currentVelocity.y,
+                    horizontalVelocity.z
+                );
             }
         }
 
@@ -154,10 +165,13 @@ namespace Game
         /// </summary>
         private void UpdateRotation()
         {
-            Vector3 direction;
-            direction = MoveInput;
+            // 물리 충돌로 생긴 회전 제거
+            Vector3 angularVelocity = rigidbodyComp.angularVelocity;
+            angularVelocity.y = 0f;
+            rigidbodyComp.angularVelocity = angularVelocity;
 
             // Yaw 축만 사용하기
+            Vector3 direction = MoveInput;
             direction.y = 0f;
 
             if (direction.sqrMagnitude < 0.001f) return;
