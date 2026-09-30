@@ -178,7 +178,7 @@ namespace Game
         /// </summary>
         private void UpdateRotation()
         {
-            if (!IsCanMove) return;
+            if (!IsCanMove || rigidbodyComp.linearVelocity.sqrMagnitude == 0f) return;
 
             // 물리 충돌로 생긴 회전 제거
             Vector3 angularVelocity = rigidbodyComp.angularVelocity;
