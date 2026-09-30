@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 
 namespace Game
@@ -7,7 +6,7 @@ namespace Game
     {
         #region Inspector
 
-        [ReadOnly] [SerializeField] private Pawn _possessTarget = null;
+        [ReadOnly][SerializeField] private Pawn _possessTarget = null;
 
         [Header("Aim Settings")]
         [ReadOnly] public AimTarget aimTarget = null;
