@@ -138,39 +138,39 @@ namespace Game
         /// </summary>
         private void UpdateMovement()
         {
-            if (!IsGrounded || IsJumping || !IsCanMove)
-                return;
+            if (!IsGrounded || IsJumping || !IsCanMove) return;
 
             Vector3 inputDir = MoveInput.normalized;
             Vector3 moveDir = inputDir;
+            bool isSlope = false;
 
-            // 경사면 방향 검사용
             Ray ray = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
 
             if (Physics.Raycast(ray, out RaycastHit hit, 1.2f, groundLayer, QueryTriggerInteraction.Ignore))
             {
+                float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
+                isSlope = slopeAngle > 1f;
+
                 moveDir = Vector3.ProjectOnPlane(inputDir, hit.normal).normalized;
                 Debug.DrawRay(hit.point, hit.normal, Color.red);
             }
 
             float speed = IsSprint ? maxSpeed : walkMaxSpeed;
-
             Vector3 targetVelocity = moveDir * speed * Mathf.Clamp01(MoveInput.magnitude);
-
             float accel = MoveInput.sqrMagnitude > 0f ? acceleration : deceleration;
 
-            // 현재 Rigidbody의 Y 속도는 건드리지 않는다.
             Vector3 currentVelocity = rigidbodyComp.linearVelocity;
-
             Vector3 currentHorizontalVelocity = new Vector3(currentVelocity.x, 0f, currentVelocity.z);
-
             Vector3 targetHorizontalVelocity = new Vector3(targetVelocity.x, 0f, targetVelocity.z);
-
             Vector3 horizontalVelocity = Vector3.MoveTowards(currentHorizontalVelocity, targetHorizontalVelocity, accel * Time.fixedDeltaTime);
 
             HorizontalVelocity = horizontalVelocity;
 
-            rigidbodyComp.linearVelocity = new Vector3(horizontalVelocity.x, currentVelocity.y, horizontalVelocity.z);
+            float verticalVelocity = currentVelocity.y;
+
+            if (!isSlope && verticalVelocity > 0f) verticalVelocity = 0f;
+
+            rigidbodyComp.linearVelocity = new Vector3(horizontalVelocity.x, verticalVelocity, horizontalVelocity.z);
         }
 
         /// <summary>
