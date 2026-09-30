@@ -38,11 +38,13 @@
 ---
 config:
   themeCSS: |
+    a, a:link, a:visited, a:hover, a:active, a:focus, a *,
     .node a, .node a:link, .node a:visited, .node a:hover,
     .node .nodeLabel, .node .nodeLabel *, .node text {
       color: #e6edf3 !important;
       fill: #e6edf3 !important;
       text-decoration: none !important;
+      text-decoration-line: none !important;
     }
 ---
 flowchart LR
@@ -70,11 +72,13 @@ flowchart LR
 ---
 config:
   themeCSS: |
+    a, a:link, a:visited, a:hover, a:active, a:focus, a *,
     .node a, .node a:link, .node a:visited, .node a:hover,
     .node .nodeLabel, .node .nodeLabel *, .node text {
       color: #e6edf3 !important;
       fill: #e6edf3 !important;
       text-decoration: none !important;
+      text-decoration-line: none !important;
     }
 ---
 flowchart TB
@@ -89,8 +93,7 @@ flowchart TB
             direction TB
             Movement["Movement Component<br/>이동 · 달리기 · 점프 · 회전"]
             Animation["Animation Controller<br/>이동 상태 조회 · 애니메이션 갱신"]
-            Animator["Animator<br/>애니메이션 재생"]
-            Movement ~~~ Animation ~~~ Animator
+            Movement ~~~ Animation
         end
 
         subgraph Gameplay["스킬 · 버프 · 능력치"]
@@ -131,25 +134,38 @@ flowchart TB
 
 ### 캐릭터 · 플레이어 제어
 
-- **캐릭터 · 빙의** — 컴포넌트 구성, 기본 캐릭터 빙의 및 입력 연결 — [Character.cs](Assets/Scripts/InGame/Object/Pawn/Character/Character.cs), [PlayerController.cs](Assets/Scripts/InGame/Object/PlayerController.cs)
-- **이동** — 카메라 기준 이동, 달리기·점프·회전, 지면·경사 판정 — [Movement.cs](Assets/Scripts/InGame/Object/Pawn/Movement.cs)
-- **애니메이션 · Foot IK** — 이동 상태 반영, 발 위치·몸체 높이 보정 — [CharacterAnimationController.cs](Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.cs), [CharacterAnimationController.FootIK.cs](Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.FootIK.cs)
-- **조준 · 카메라** — 화면 중앙 조준, 궤도 회전, 장애물 대응 — [AimTarget.cs](Assets/Scripts/InGame/Object/Pawn/Character/AimTarget.cs), [PlayerCameraController.cs](Assets/Scripts/Common/PlayerCameraController.cs)
-- **스킬 · 버프 · 능력치** — 스킬·지속 효과 관리, 캐릭터 상태 데이터 — [SkillManager.cs](Assets/Scripts/InGame/Skill/SkillManager.cs), [BuffManager.cs](Assets/Scripts/InGame/Buff/BuffManager.cs), [StatusInfo.cs](Assets/Scripts/InGame/Status/StatusInfo.cs)
+- **캐릭터 · 빙의**: 컴포넌트 구성, 기본 캐릭터 빙의 및 입력 연결\
+  [Character.cs](Assets/Scripts/InGame/Object/Pawn/Character/Character.cs), [PlayerController.cs](Assets/Scripts/InGame/Object/PlayerController.cs)
+- **이동**: 카메라 기준 이동, 달리기·점프·회전, 지면·경사 판정\
+  [Movement.cs](Assets/Scripts/InGame/Object/Pawn/Movement.cs)
+- **애니메이션 · Foot IK**: 이동 상태 반영, 발 위치·몸체 높이 보정\
+  [CharacterAnimationController.cs](Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.cs), [CharacterAnimationController.FootIK.cs](Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.FootIK.cs)
+- **조준 · 카메라**: 화면 중앙 조준, 궤도 회전, 장애물 대응\
+  [AimTarget.cs](Assets/Scripts/InGame/Object/Pawn/Character/AimTarget.cs), [PlayerCameraController.cs](Assets/Scripts/Common/PlayerCameraController.cs)
+- **스킬 · 버프 · 능력치**: 스킬·지속 효과 관리, 캐릭터 상태 데이터\
+  [SkillManager.cs](Assets/Scripts/InGame/Skill/SkillManager.cs), [BuffManager.cs](Assets/Scripts/InGame/Buff/BuffManager.cs), [StatusInfo.cs](Assets/Scripts/InGame/Status/StatusInfo.cs)
 
 ### HUD
 
-- **월드 추적** — 월드 좌표를 화면 좌표로 변환해 대상 추적 — [FollowHUD.cs](Assets/Scripts/UI/HUD/FollowHUD.cs)
-- **HUD 관리** — 이름·말풍선·체력바 부착 및 해제, 풀을 통한 재사용 — [HUDManager.cs](Assets/Scripts/UI/HUD/HUDManager.cs)
-- **앵커** — HUD 기준점 설정, 씬 뷰 위치·이름 표시 — [WidgetAnchor.cs](Assets/Scripts/UI/HUD/WidgetAnchor.cs)
+- **월드 추적**: 월드 좌표를 화면 좌표로 변환해 대상 추적\
+  [FollowHUD.cs](Assets/Scripts/UI/HUD/FollowHUD.cs)
+- **HUD 관리**: 이름·말풍선·체력바 부착 및 해제, 풀을 통한 재사용\
+  [HUDManager.cs](Assets/Scripts/UI/HUD/HUDManager.cs)
+- **앵커**: HUD 기준점 설정, 씬 뷰 위치·이름 표시\
+  [WidgetAnchor.cs](Assets/Scripts/UI/HUD/WidgetAnchor.cs)
 
 ### 유틸리티 · 에디터
 
-- **싱글톤 · 일반 클래스용** — 공용 인스턴스 관리 — [SingletonBehaviour.cs](Assets/Scripts/Utils/SingletonBehaviour.cs), [Singleton.cs](Assets/Scripts/Utils/Singleton.cs)
-- **오브젝트 풀 · 코루틴 캐시** — 오브젝트와 대기 명령 재사용 — [ObjectPool.cs](Assets/Scripts/Utils/ObjectPool.cs), [YieldInstructionCache.cs](Assets/Scripts/Utils/YieldInstructionCache.cs)
-- **공통 도구 · 지면 타일링** — 카메라·레이어·확률·오브젝트 검색, 텍스처 크기 조절 — [Utils.cs](Assets/Scripts/Utils/Utils.cs), [GroundTiling.cs](Assets/Scripts/Common/GroundTiling.cs)
-- **읽기 전용 · 표시 이름** — 인스펙터 속성 표시 보조 — [ReadOnlyAttribute.cs](Assets/Scripts/Etc/ReadOnlyAttribute.cs), [DisplayNameAttribute.cs](Assets/Scripts/Etc/DisplayNameAttribute.cs)
-- **카메라 핸들 · 빙의 단축키** — 씬 뷰 카메라 편집, 캐릭터 제어 테스트 — [SpringArmEditor.cs](Assets/Scripts/Common/Editor/SpringArmEditor.cs), [EditorPossessInput.cs](Assets/Scripts/Common/EditorPossessInput.cs)
+- **싱글톤 · 일반 클래스용**: 공용 인스턴스 관리\
+  [SingletonBehaviour.cs](Assets/Scripts/Utils/SingletonBehaviour.cs), [Singleton.cs](Assets/Scripts/Utils/Singleton.cs)
+- **오브젝트 풀 · 코루틴 캐시**: 오브젝트와 대기 명령 재사용\
+  [ObjectPool.cs](Assets/Scripts/Utils/ObjectPool.cs), [YieldInstructionCache.cs](Assets/Scripts/Utils/YieldInstructionCache.cs)
+- **공통 도구 · 지면 타일링**: 카메라·레이어·확률·오브젝트 검색, 텍스처 크기 조절\
+  [Utils.cs](Assets/Scripts/Utils/Utils.cs), [GroundTiling.cs](Assets/Scripts/Common/GroundTiling.cs)
+- **읽기 전용 · 표시 이름**: 인스펙터 속성 표시 보조\
+  [ReadOnlyAttribute.cs](Assets/Scripts/Etc/ReadOnlyAttribute.cs), [DisplayNameAttribute.cs](Assets/Scripts/Etc/DisplayNameAttribute.cs)
+- **카메라 핸들 · 빙의 단축키**: 씬 뷰 카메라 편집, 캐릭터 제어 테스트\
+  [SpringArmEditor.cs](Assets/Scripts/Common/Editor/SpringArmEditor.cs), [EditorPossessInput.cs](Assets/Scripts/Common/EditorPossessInput.cs)
 
 ## 라이선스
 
