@@ -81,11 +81,10 @@
 - 에디터 테스트용 Pawn 빙의 단축키 — [EditorPossessInput.cs](Assets/Scripts/Common/EditorPossessInput.cs)
 - 지면 크기에 맞춘 머티리얼 텍스처 타일링 — [GroundTiling.cs](Assets/Scripts/Common/GroundTiling.cs)
 
-## 시작하기
+## 라이선스
 
-1. 저장소를 내려받습니다.
-2. Unity Hub에서 프로젝트 폴더를 추가합니다.
-3. Unity `6000.0.83f1` 버전으로 프로젝트를 엽니다.
+직접 작성한 코드는 [MIT License](LICENSE)에 따라 사용할 수 있습니다.  
+Unity 패키지와 서드파티 에셋에는 각 제작자가 정한 별도의 라이선스가 적용됩니다.
 
 ---
 
