@@ -30,76 +30,78 @@
 
 ## 프레임워크 구조
 
+전체 연결과 캐릭터 내부 구성을 나누어 표시합니다. 전체 연결도에는 시스템 사이의 주요 연결만, 캐릭터 상세도에는 보유하거나 참조하는 구성 요소를 나열합니다.
+
+### 전체 연결
+
 ```mermaid
-flowchart TB
-    GameMode[Game Mode] -->|기본 캐릭터 빙의| Controller[Player Controller]
+flowchart LR
+    GameMode[Game Mode] -->|기본 Pawn 빙의 요청| Controller[Player Controller]
+    Controller -->|빙의 · 입력 전달| Character[Character / Pawn]
+    Controller -->|Spring Arm 연결| Camera["Camera Controller<br/>궤도 회전 · 장애물 대응"]
+    Character -->|HUD 부착 · 해제| HUD["HUD Manager<br/>Object Pool · 월드 추적 HUD"]
 
-    subgraph Character[Character GameObject / Pawn]
-        direction LR
-        Pawn[Pawn Core] -->|보유 · 참조| Movement[Movement Component]
-        Pawn -->|보유 · 참조| Animation[Animation Controller]
-        Pawn --> Aim[Aim Target]
-        Pawn --> SpringArm[Spring Arm]
-        Controller -->|카메라 기준 입력| Movement
-        Movement -->|이동 상태 조회| Animation
-        Animation --> FootIK[Animator & Foot IK]
-        Controller -->|화면 중앙 Raycast| Aim
-    end
-
-    subgraph Camera[3인칭 카메라]
-        direction LR
-        Controller -->|빙의 시 연결| CameraController[Camera Controller]
-        SpringArm -->|기준 위치 · 회전| CameraController
-        CameraController -->|Raycast · SphereCast| Collision[장애물 대응]
-    end
-
-    Controller -->|Possess / Unpossess| Pawn
-
-    subgraph Gameplay[게임플레이 기반]
-        direction LR
-        Pawn --> SkillManager[Skill Manager]
-        Pawn --> BuffManager[Buff Manager]
-        Pawn --> Status[Status]
-        SkillManager --> Skill[Skill]
-        BuffManager --> Buff[Buff]
-        Skill -->|효과 적용| Status
-        Buff -->|지속 효과| Status
-    end
-
-    subgraph UI[월드 추적 HUD]
-        direction LR
-        Pawn --> Anchor[Widget Anchor]
-        Pawn -->|활성화 시 부착| HUDManager[HUD Manager]
-        HUDManager -->|재사용| Pool[Object Pool]
-        Pool --> FollowHUD[이름 · 말풍선 · 체력바]
-        Anchor -->|월드 좌표를 화면 좌표로 변환| FollowHUD
-    end
+    classDef focus fill:#243b53,stroke:#63b3ed,color:#fff,stroke-width:2px
+    class Character focus
 ```
 
-`Pawn`은 플레이어가 조종하거나 AI가 제어할 수 있는 캐릭터의 기반 클래스입니다. `GameMode`가 기본 캐릭터(`Pawn`)를 빙의시키면 `PlayerController`가 이동, 조준, 카메라를 연결합니다. 캐릭터는 스킬·버프·스테이터스를 소유하고, HUD는 월드 오브젝트를 추적하며 오브젝트 풀을 통해 재사용됩니다.
+### 캐릭터 내부 구성
+
+`Pawn`을 상속하는 `Character`를 기준으로 묶었습니다. 아래 박스의 배치는 실행 순서가 아니라 기능별 구성 목록입니다.
+
+```mermaid
+flowchart TB
+    subgraph Character["Character / Pawn — 내부 구성"]
+        direction TB
+        Core["Pawn → Character<br/>컴포넌트 참조 · 빙의 / 빙의 해제"]
+        Core --- Motion
+        Core --- Gameplay
+        Core --- Targets
+
+        subgraph Motion["이동 · 애니메이션"]
+            direction TB
+            Movement["Movement Component<br/>이동 · 달리기 · 점프 · 회전"]
+            Animation["Animation Controller<br/>이동 상태 조회 · 애니메이션 갱신"]
+            FootIK["Animator & Foot IK<br/>애니메이션 재생 · 발 위치 보정"]
+            Movement ~~~ Animation ~~~ FootIK
+        end
+
+        subgraph Gameplay["스킬 · 버프 · 능력치"]
+            direction TB
+            Skills["Skill Manager / Skill<br/>스킬 보유 · 갱신"]
+            Buffs["Buff Manager / Buff<br/>지속 효과 · 수명 관리"]
+            Status["StatusInfo / Status<br/>현재 체력 · 기본 능력치"]
+            Skills ~~~ Buffs ~~~ Status
+        end
+
+        subgraph Targets["조준 · 카메라 · HUD 기준점"]
+            direction TB
+            Aim["Aim Target / Aim Rig<br/>조준 위치 · Rig 가중치"]
+            SpringArm["Spring Arm<br/>카메라 기준 위치 · 회전"]
+            Anchor["Widget Anchor<br/>이름 · 말풍선 · 체력바 기준점"]
+            Aim ~~~ SpringArm ~~~ Anchor
+        end
+    end
+
+    classDef focus fill:#243b53,stroke:#63b3ed,color:#fff,stroke-width:2px
+    class Core focus
+```
+
+`GameMode`가 기본 `Pawn`의 빙의를 요청하면 `PlayerController`가 이동 입력, 조준 대상과 카메라를 연결합니다. 카메라는 캐릭터 하위의 `SpringArm`을 기준으로 움직이며, HUD는 `WidgetAnchor`를 추적하고 오브젝트 풀을 통해 재사용됩니다.
 
 ## 개발된 기능
 
 ### 캐릭터 구성 및 플레이어 제어
 
-캐릭터는 `Pawn`을 중심으로 이동, 애니메이션, 조준, 카메라 기준점을 각각 독립된 컴포넌트로 구성합니다. `PlayerController`는 캐릭터를 빙의한 뒤 이 컴포넌트들에 플레이어 입력을 전달합니다.
+캐릭터는 `Pawn`을 중심으로 필요한 기능을 독립된 컴포넌트로 구성하며, `PlayerController`가 캐릭터를 빙의해 입력을 전달합니다.
 
-- **Character / Pawn — 캐릭터 본체**
-  - 이동 및 애니메이션 컴포넌트 참조와 스킬·버프·스테이터스 소유 — [Pawn.cs](Assets/Scripts/InGame/Object/Pawn/Pawn.cs)
-  - 에임 타겟과 추적 HUD 연결을 담당하는 캐릭터 확장 — [Character.cs](Assets/Scripts/InGame/Object/Pawn/Character/Character.cs)
-  - Game Mode의 기본 캐릭터 자동 빙의와 빙의 해제 — [GameMode.cs](Assets/Scripts/Management/GameMode.cs), [PlayerController.cs](Assets/Scripts/InGame/Object/PlayerController.cs)
-- **Movement Component — 이동과 물리**
-  - `PlayerController`에서 카메라 방향 기준의 이동, 달리기, 점프 입력 수신
-  - Rigidbody 기반 가속·감속, 캐릭터 회전, 지면·경사면 판정과 코요테 타임 처리 — [Movement.cs](Assets/Scripts/InGame/Object/Pawn/Movement.cs)
-- **Animation Controller — 애니메이션 표현**
-  - `Movement`의 속도, 방향, 점프 및 낙하 상태를 읽어 Animator 파라미터 갱신 — [CharacterAnimationController.cs](Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.cs)
-  - 정지 상태에서 양발의 지면 위치와 경사를 반영하고 발 높이 차이에 맞춰 몸체 높이 보정 — [CharacterAnimationController.FootIK.cs](Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.FootIK.cs)
-- **Aim Target — 조준**
-  - 화면 중앙 Raycast 결과로 타겟 위치와 Aim Rig 가중치 갱신 — [PlayerController.cs](Assets/Scripts/InGame/Object/PlayerController.cs), [AimTarget.cs](Assets/Scripts/InGame/Object/Pawn/Character/AimTarget.cs)
-- **Spring Arm — 캐릭터별 카메라 기준점**
-  - 캐릭터 하위의 Spring Arm이 카메라 기본 위치와 회전을 제공 — [SpringArm.cs](Assets/Scripts/Common/SpringArm.cs)
-  - 메인 카메라의 `PlayerCameraController`가 빙의한 캐릭터의 Spring Arm에 연결되어 Yaw/Pitch 궤도 회전 수행
-  - Raycast와 SphereCast로 장애물을 감지하고, 진입 시 즉시 거리를 줄인 뒤 이탈 시 부드럽게 복귀 — [PlayerCameraController.cs](Assets/Scripts/Common/PlayerCameraController.cs)
+- **Character / Pawn** — 이동·애니메이션 컴포넌트를 연결하고 스킬·버프·스테이터스를 관리하는 캐릭터 본체 — [Pawn.cs](Assets/Scripts/InGame/Object/Pawn/Pawn.cs), [Character.cs](Assets/Scripts/InGame/Object/Pawn/Character/Character.cs)
+- **Skill / Buff / Status** — 캐릭터가 소유하는 스킬, 지속 효과와 능력치 관리 구조 — [SkillManager.cs](Assets/Scripts/InGame/Skill/SkillManager.cs), [BuffManager.cs](Assets/Scripts/InGame/Buff/BuffManager.cs), [Status.cs](Assets/Scripts/InGame/Status/Status.cs)
+- **Movement Component** — 카메라 기준 이동, 달리기, 점프, 회전과 지면·경사면 판정 처리 — [Movement.cs](Assets/Scripts/InGame/Object/Pawn/Movement.cs)
+- **Animation Controller** — 이동 상태에 따른 애니메이션 갱신과 Foot IK 보정 — [CharacterAnimationController.cs](Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.cs), [CharacterAnimationController.FootIK.cs](Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.FootIK.cs)
+- **Aim Target** — 화면 중앙 Raycast를 이용한 조준 위치와 Aim Rig 가중치 갱신 — [PlayerController.cs](Assets/Scripts/InGame/Object/PlayerController.cs), [AimTarget.cs](Assets/Scripts/InGame/Object/Pawn/Character/AimTarget.cs)
+- **Spring Arm / Camera Controller** — 캐릭터별 카메라 기준점, 궤도 회전과 장애물 충돌 처리 — [SpringArm.cs](Assets/Scripts/Common/SpringArm.cs), [PlayerCameraController.cs](Assets/Scripts/Common/PlayerCameraController.cs)
+- **Possession** — Game Mode의 기본 캐릭터 자동 빙의 및 빙의 해제 — [GameMode.cs](Assets/Scripts/Management/GameMode.cs), [PlayerController.cs](Assets/Scripts/InGame/Object/PlayerController.cs)
 
 ### HUD
 
@@ -107,12 +109,6 @@ flowchart TB
 - 이름표와 말풍선 HUD 부착 및 해제 — [HUDManager.cs](Assets/Scripts/UI/HUD/HUDManager.cs), [FollowName.cs](Assets/Scripts/UI/HUD/FollowName.cs), [FollowSpeechBubble.cs](Assets/Scripts/UI/HUD/FollowSpeechBubble.cs)
 - 오브젝트 풀을 이용한 추적 HUD 재사용 — [HUDManager.cs](Assets/Scripts/UI/HUD/HUDManager.cs), [ObjectPool.cs](Assets/Scripts/Utils/ObjectPool.cs)
 - 씬 뷰에서 HUD 앵커 위치 및 이름 표시 — [WidgetAnchor.cs](Assets/Scripts/UI/HUD/WidgetAnchor.cs)
-
-### 게임플레이 기반 구조
-
-- 캐릭터 기반 클래스(`Pawn`)를 중심으로 한 스킬 및 버프 관리 구조 — [Pawn.cs](Assets/Scripts/InGame/Object/Pawn/Pawn.cs), [SkillManager.cs](Assets/Scripts/InGame/Skill/SkillManager.cs), [BuffManager.cs](Assets/Scripts/InGame/Buff/BuffManager.cs)
-- 스킬 실행과 지속형 버프 갱신을 위한 확장 클래스 — [Skill.cs](Assets/Scripts/InGame/Skill/Skill.cs), [Buff.cs](Assets/Scripts/InGame/Buff/Buff.cs)
-- 스테이터스 조합을 위한 덧셈 및 뺄셈 연산자 — [Status.cs](Assets/Scripts/InGame/Status/Status.cs)
 
 ### 공통 유틸리티 및 에디터 도구
 
