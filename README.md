@@ -19,19 +19,14 @@
 개인 프로젝트의 기반으로 사용하는 동시에 **샘플 코드 제출 및 기술 검토 자료**로도 활용합니다.  
 완성된 하나의 게임을 제공하는 저장소가 아니라, 기능별 구현과 설계 방식을 보여주는 데 목적이 있습니다.
 
+기존 Unity 개발 경험을 통해 정립한 주요 패턴에 Unreal Engine의 장점을 접목해 개발하고 있습니다.
+
 ## 목표
 
 - 자주 사용하는 시스템을 모듈화하여 재사용하기
 - 새로운 기능을 자유롭게 실험하고 검증하기
 - 나만의 개발 방식과 코드 스타일을 꾸준히 정리하기
 - 실제 프로젝트에 빠르게 적용할 수 있는 기반 만들기
-
-## 프로젝트 환경
-
-- **Unity:** 6000.0.83f1
-- **Render Pipeline:** Universal Render Pipeline (URP) 17.0.4
-- **Input:** Input System 1.19.0
-- **Asset Management:** Addressables 2.9.1
 
 ## 개발된 기능
 
@@ -85,6 +80,13 @@
 
 직접 작성한 코드는 [MIT License](LICENSE)에 따라 사용할 수 있습니다.  
 Unity 패키지와 서드파티 에셋에는 각 제작자가 정한 별도의 라이선스가 적용됩니다.
+
+## 프로젝트 환경
+
+- **Unity:** 6000.0.83f1
+- **Render Pipeline:** Universal Render Pipeline (URP) 17.0.4
+- **Input:** Input System 1.19.0
+- **Asset Management:** Addressables 2.9.1
 
 ---
 
