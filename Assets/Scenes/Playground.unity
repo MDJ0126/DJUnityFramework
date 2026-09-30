@@ -894,7 +894,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _possessTarget: {fileID: 0}
-  _aimTarget: {fileID: 0}
+  aimTarget:
+    target: {fileID: 0}
+    AimRig: {fileID: 0}
   aimDistance: 100
   aimMask:
     serializedVersion: 2

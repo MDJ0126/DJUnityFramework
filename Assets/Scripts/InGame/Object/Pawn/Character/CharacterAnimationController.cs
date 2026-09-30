@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Game
 {
@@ -23,12 +24,33 @@ namespace Game
             _boneAnimator.SetFloat("Velocity", _owner.Movement.NormalizedVelocity);
             _boneAnimator.SetBool("IsJumping", _movement.IsJumping);
             _boneAnimator.SetBool("IsFalling", _movement.IsFalling);
+
+            UpdateMoveAnimation();
         }
 
         public override void PlayActionTest()
         {
             base.PlayActionTest();
             _boneAnimator.SetTrigger("ActionTest");
+        }
+
+        private void UpdateMoveAnimation()
+        {
+            Vector3 forward = transform.forward;
+
+            // 상하 조준은 이동 애니메이션 방향에 필요 없으므로 제거
+            forward.y = 0f;
+            forward.Normalize();
+
+            Vector3 right = Vector3.Cross(Vector3.up, forward);
+
+            Vector3 moveDir = Camera.main.transform.forward.normalized;
+
+            float posX = Vector3.Dot(moveDir, right);
+            float posY = Vector3.Dot(moveDir, forward);
+
+            _boneAnimator.SetFloat("PosX", posX);
+            _boneAnimator.SetFloat("PosY", posY);
         }
     }
 }
