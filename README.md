@@ -129,9 +129,6 @@ Unity 패키지와 서드파티 에셋에는 각 제작자가 정한 별도의 �
 ## 프로젝트 환경
 
 - **Unity:** 6000.0.83f1
-- **Render Pipeline:** Universal Render Pipeline (URP) 17.0.4
-- **Input:** Input System 1.19.0
-- **Asset Management:** Addressables 2.9.1
 
 ---
 
