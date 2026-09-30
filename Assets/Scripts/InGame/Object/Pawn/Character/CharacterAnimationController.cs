@@ -21,7 +21,7 @@ namespace Game
 
         private void Update()
         {
-            _boneAnimator.SetFloat("Speed", _owner.Movement.NormalizedVelocity);
+            _boneAnimator.SetFloat("Speed", _owner.Movement.NormalizedHorizontalVelocity);
             _boneAnimator.SetBool("IsSprint", _owner.Movement.IsSprint);
             _boneAnimator.SetBool("IsJumping", _movement.IsJumping);
             _boneAnimator.SetBool("IsFalling", _movement.IsFalling);
@@ -37,12 +37,11 @@ namespace Game
 
         private void UpdateMoveAnimation()
         {
-            Vector3 velocity = _owner.Movement.Velocity;
-            velocity.y = 0f;
+            Vector3 velocity = _owner.Movement.HorizontalVelocity;
 
             Vector3 localDir = Vector3.zero;
 
-            if (velocity.sqrMagnitude > 0.001f)
+            if (_owner.Movement.IsCanMove && velocity.sqrMagnitude > 0.001f)
             {
                 localDir = transform.InverseTransformDirection(velocity.normalized);
             }

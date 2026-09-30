@@ -23,12 +23,12 @@ namespace Game
         private LayerMask groundLayer;
 
         public Vector3 MoveInput { get; set; } = Vector3.zero;
-        public Vector3 Velocity { get; set; } = Vector3.zero;
-        public float NormalizedVelocity
+        public Vector3 HorizontalVelocity { get; set; } = Vector3.zero;
+        public float NormalizedHorizontalVelocity
         {
             get
             {
-                Vector3 horizontalVelocity = Velocity;
+                Vector3 horizontalVelocity = HorizontalVelocity;
                 horizontalVelocity.y = 0f;
                 return horizontalVelocity.magnitude / maxSpeed;
             }
@@ -39,6 +39,7 @@ namespace Game
         public bool IsJumping { get; private set; } = false;
         public bool IsFalling { get; private set; } = false;
         public bool IsSprint { get; set; } = false;
+        public bool IsCanMove { get; private set; } = false;
 
         protected virtual void Awake()
         {
@@ -49,6 +50,7 @@ namespace Game
 
         protected virtual void FixedUpdate()
         {
+            CheckCanMove();
             CheckGround();
             CheckJumpState();
             UpdateMovement();
@@ -56,24 +58,18 @@ namespace Game
         }
 
         /// <summary>
-        /// 점프 상태 체크
+        /// 이동 가능 체크
         /// </summary>
-        private void CheckJumpState()
+        private void CheckCanMove()
         {
-            //if (IsJumping)
+            if (IsFalling && HorizontalVelocity.sqrMagnitude > 0f)
             {
-                if (rigidbodyComp.linearVelocity.y < 0.2f)
-                {
-                    IsJumping = false;
-                    IsFalling = true;
-                }
+                IsCanMove = false;
             }
-            if (IsFalling)
+
+            if (!IsCanMove && rigidbodyComp.linearVelocity.sqrMagnitude <= 1f)
             {
-                if (IsGrounded)
-                {
-                    IsFalling = false;
-                }
+                IsCanMove = true;
             }
         }
 
@@ -116,48 +112,65 @@ namespace Game
         }
 
         /// <summary>
+        /// 점프 상태 체크
+        /// </summary>
+        private void CheckJumpState()
+        {
+            //if (IsJumping)
+            {
+                if (rigidbodyComp.linearVelocity.y < 0.2f)
+                {
+                    IsJumping = false;
+                    IsFalling = true;
+                }
+            }
+            if (IsFalling)
+            {
+                if (IsGrounded)
+                {
+                    IsFalling = false;
+                }
+            }
+        }
+
+        /// <summary>
         /// 이동 업데이트
         /// </summary>
         private void UpdateMovement()
         {
-            if (!IsGrounded || IsJumping)
+            if (!IsGrounded || IsJumping || !IsCanMove)
                 return;
 
+            Vector3 inputDir = MoveInput.normalized;
+            Vector3 moveDir = inputDir;
+
+            // 경사면 방향 검사용
             Ray ray = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
 
-            if (Physics.Raycast(ray, out RaycastHit hit, 1.2f, groundLayer))
+            if (Physics.Raycast(ray, out RaycastHit hit, 1.2f, groundLayer, QueryTriggerInteraction.Ignore))
             {
-                Vector3 inputDir = MoveInput.normalized;
-
-                Vector3 slopeMoveDir = Vector3.ProjectOnPlane(inputDir, hit.normal).normalized;
-
-                float speed = IsSprint ? maxSpeed : walkMaxSpeed;
-
-                Vector3 targetVelocity = slopeMoveDir * speed * Mathf.Clamp01(MoveInput.magnitude);
-
-                float accel = MoveInput.sqrMagnitude > 0f ? acceleration : deceleration;
-
-                // 현재 Rigidbody의 Y 속도는 건드리지 않는다.
-                Vector3 currentVelocity = rigidbodyComp.linearVelocity;
-
-                Vector3 currentHorizontalVelocity = new Vector3(currentVelocity.x, 0f, currentVelocity.z);
-
-                Vector3 targetHorizontalVelocity = new Vector3(targetVelocity.x, 0f, targetVelocity.z);
-
-                Vector3 horizontalVelocity = Vector3.MoveTowards(
-                    currentHorizontalVelocity,
-                    targetHorizontalVelocity,
-                    accel * Time.fixedDeltaTime
-                );
-
-                Velocity = horizontalVelocity;
-
-                rigidbodyComp.linearVelocity = new Vector3(
-                    horizontalVelocity.x,
-                    currentVelocity.y,
-                    horizontalVelocity.z
-                );
+                moveDir = Vector3.ProjectOnPlane(inputDir, hit.normal).normalized;
+                Debug.DrawRay(hit.point, hit.normal, Color.red);
             }
+
+            float speed = IsSprint ? maxSpeed : walkMaxSpeed;
+
+            Vector3 targetVelocity = moveDir * speed * Mathf.Clamp01(MoveInput.magnitude);
+
+            float accel = MoveInput.sqrMagnitude > 0f ? acceleration : deceleration;
+
+            // 현재 Rigidbody의 Y 속도는 건드리지 않는다.
+            Vector3 currentVelocity = rigidbodyComp.linearVelocity;
+
+            Vector3 currentHorizontalVelocity = new Vector3(currentVelocity.x, 0f, currentVelocity.z);
+
+            Vector3 targetHorizontalVelocity = new Vector3(targetVelocity.x, 0f, targetVelocity.z);
+
+            Vector3 horizontalVelocity = Vector3.MoveTowards(currentHorizontalVelocity, targetHorizontalVelocity, accel * Time.fixedDeltaTime);
+
+            HorizontalVelocity = horizontalVelocity;
+
+            rigidbodyComp.linearVelocity = new Vector3(horizontalVelocity.x, currentVelocity.y, horizontalVelocity.z);
         }
 
         /// <summary>
@@ -165,6 +178,8 @@ namespace Game
         /// </summary>
         private void UpdateRotation()
         {
+            if (!IsCanMove) return;
+
             // 물리 충돌로 생긴 회전 제거
             Vector3 angularVelocity = rigidbodyComp.angularVelocity;
             angularVelocity.y = 0f;

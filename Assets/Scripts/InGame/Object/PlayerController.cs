@@ -100,15 +100,19 @@ namespace Game
                 pawn = _lastPossessTarget;
             }
             _possessTarget = pawn;
-            _lastPossessTarget = pawn;
-            _possessTarget.Possess(this);
 
-            _movement = _possessTarget.GetComponent<Movement>();
-            var playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
-            playerCameraController.Bind(pawn.GetComponentInChildren<SpringArm>());
-            IsPossessed = true;
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            if (_possessTarget != null)
+            {
+                _lastPossessTarget = pawn;
+                _possessTarget.Possess(this);
+
+                _movement = _possessTarget.GetComponent<Movement>();
+                var playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
+                playerCameraController.Bind(pawn.GetComponentInChildren<SpringArm>());
+                IsPossessed = true;
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
         }
 
         /// <summary>
