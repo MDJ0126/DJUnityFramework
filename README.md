@@ -31,16 +31,18 @@
 ## 프레임워크 구조
 
 ```mermaid
-flowchart LR
+flowchart TB
     GameMode[Game Mode] -->|기본 Pawn 빙의| Controller[Player Controller]
 
     subgraph Control[캐릭터 제어]
+        direction LR
         Controller -->|카메라 기준 입력| Movement[Movement]
         Movement -->|속도 · 상태| Animation[Animation & Foot IK]
         Controller -->|화면 중앙 Raycast| Aim[Aim Target]
     end
 
     subgraph Camera[3인칭 카메라]
+        direction LR
         Controller -->|빙의 시 연결| CameraController[Camera Controller]
         SpringArm[Spring Arm] -->|기준 위치 · 회전| CameraController
         CameraController -->|Raycast · SphereCast| Collision[장애물 대응]
@@ -49,6 +51,7 @@ flowchart LR
     Controller --> Pawn[Pawn]
 
     subgraph Gameplay[게임플레이 기반]
+        direction LR
         Pawn --> SkillManager[Skill Manager]
         Pawn --> BuffManager[Buff Manager]
         Pawn --> Status[Status]
@@ -59,6 +62,7 @@ flowchart LR
     end
 
     subgraph UI[월드 추적 HUD]
+        direction LR
         Pawn --> Anchor[Widget Anchor]
         Pawn -->|활성화 시 부착| HUDManager[HUD Manager]
         HUDManager -->|재사용| Pool[Object Pool]
