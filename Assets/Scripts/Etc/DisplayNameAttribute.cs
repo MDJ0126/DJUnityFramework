@@ -10,6 +10,9 @@ public class DisplayNameAttribute : PropertyAttribute
 {
     public string Name { get; private set; }
 
+    /// <summary>
+    /// 인스펙터에 대신 표시할 필드 이름 저장
+    /// </summary>
     public DisplayNameAttribute(string name)
     {
         this.Name = name;
@@ -23,6 +26,9 @@ public class DisplayNameAttribute : PropertyAttribute
 [CustomPropertyDrawer(typeof(DisplayNameAttribute))]
 public class DisplayNameNameDrawer : PropertyDrawer
 {
+    /// <summary>
+    /// 기본 라벨을 어트리뷰트에 지정한 표시 이름으로 교체하여 그리기
+    /// </summary>
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         // 어트리뷰트 타겟을 가져옴
@@ -35,6 +41,9 @@ public class DisplayNameNameDrawer : PropertyDrawer
         EditorGUI.PropertyField(position, property, label, true);
     }
 
+    /// <summary>
+    /// 배열과 복합 타입을 포함한 기본 프로퍼티 높이 반환
+    /// </summary>
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
         // 배열이나 리스트, 혹은 복잡한 구조체(클래스)일 때 높이가 깨지지 않도록 처리

@@ -22,8 +22,12 @@ public class EditorPossessInput : MonoBehaviour
         obj.AddComponent<EditorPossessInput>();
     }
 
+    /// <summary>
+    /// 에디터 테스트용 단축키로 빙의 상태 전환 또는 해제
+    /// </summary>
     private void Update()
     {
+        // F8은 마지막 Pawn을 기준으로 빙의와 해제를 토글한다.
         if (Input.GetKeyDown(KeyCode.F8))
         {
             if (PlayerController.Instance.IsPossessed)
@@ -36,6 +40,7 @@ public class EditorPossessInput : MonoBehaviour
             }
         }
 
+        // Escape는 현재 빙의 상태일 때만 해제한다.
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (PlayerController.Instance.IsPossessed)

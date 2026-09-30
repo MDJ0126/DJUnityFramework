@@ -14,6 +14,7 @@ public static class Utils
     {
         foreach (Camera camera in Camera.allCameras)
         {
+            // 오브젝트 레이어가 카메라의 Culling Mask에 포함되는지 비트 연산으로 확인한다.
             var cullingMask = 1 << gameObject.layer;
             if ((camera.cullingMask & cullingMask) != 0)
                 return camera;
@@ -47,6 +48,7 @@ public static class Utils
     public static List<T> FindAllObjects<T>() where T : UnityEngine.Object
     {
         List<T> objects = new List<T>();
+        // 로드된 모든 씬의 루트부터 비활성 자식까지 순회하여 타입이 일치하는 컴포넌트를 모은다.
         for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++)
         {
             var scene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(i);
@@ -71,6 +73,7 @@ public static class Utils
 	public static string ToDescription(this Enum source)
     {
         FieldInfo fi = source.GetType().GetField(source.ToString());
+        // DescriptionAttribute가 없으면 Enum 멤버 이름을 그대로 사용한다.
         var att = (DescriptionAttribute)fi.GetCustomAttribute(typeof(DescriptionAttribute));
         if (att != null)
         {

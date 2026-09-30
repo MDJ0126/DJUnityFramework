@@ -8,11 +8,17 @@ namespace Game
 
         public List<Skill> Skills { get; private set; } = new();
 
+        /// <summary>
+        /// 관리 중인 스킬이 사용할 소유 Pawn 설정
+        /// </summary>
         public void SetOwner(Pawn owner)
         {
             _owner = owner;
         }
 
+        /// <summary>
+        /// 등록된 모든 스킬의 시간 기반 로직 갱신
+        /// </summary>
         public void UpdateTick(float deltaTime)
         {
             foreach (Skill skill in Skills)
@@ -32,7 +38,7 @@ namespace Game
         }
 
         /// <summary>
-        /// 스킬 사겢
+        /// 스킬 삭제
         /// </summary>
         public void RemoveAtSkill(int index)
         {
@@ -46,6 +52,7 @@ namespace Game
         /// <returns></returns>
         public Skill GetSkill(int index)
         {
+            // 요청 인덱스가 목록 범위 안일 때만 스킬을 반환한다.
             if (Skills.Count > index)
             {
                 return Skills[index];

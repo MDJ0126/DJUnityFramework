@@ -76,11 +76,17 @@ public class PlayerCameraController : MonoBehaviour
         _distanceVelocity = 0f;
     }
 
+    /// <summary>
+    /// 현재 SpringArm 연결 해제
+    /// </summary>
     public void Unbind()
     {
         SpringArm = null;
     }
 
+    /// <summary>
+    /// 입력 프레임에서 마우스 회전값 갱신
+    /// </summary>
     private void Update()
     {
         if (SpringArm == null)
@@ -89,6 +95,9 @@ public class PlayerCameraController : MonoBehaviour
         UpdateRotation();
     }
 
+    /// <summary>
+    /// 캐릭터 이동이 끝난 뒤 최종 카메라 위치와 회전 갱신
+    /// </summary>
     private void LateUpdate()
     {
         if (SpringArm == null)
@@ -97,6 +106,9 @@ public class PlayerCameraController : MonoBehaviour
         UpdateCamera();
     }
 
+    /// <summary>
+    /// 마우스 입력을 누적하고 상하 회전 범위 제한
+    /// </summary>
     private void UpdateRotation()
     {
         if (!PlayerController.Instance || !PlayerController.Instance.IsPossessed) return;
@@ -104,6 +116,7 @@ public class PlayerCameraController : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
 
+        // 수평 입력은 Yaw에, 수직 입력은 반전하여 Pitch에 누적한다.
         _yaw += mouseX * mouseSensitivity;
         _pitch -= mouseY * mouseSensitivity;
 
@@ -114,6 +127,9 @@ public class PlayerCameraController : MonoBehaviour
         );
     }
 
+    /// <summary>
+    /// Orbit 회전과 장애물 거리를 반영하여 카메라 트랜스폼 갱신
+    /// </summary>
     private void UpdateCamera()
     {
         Vector3 pivotPosition = SpringArm.transform.position;
@@ -135,6 +151,7 @@ public class PlayerCameraController : MonoBehaviour
         // 위치와 회전에 동일한 Orbit Rotation 적용
         Vector3 desiredOffset = orbitRotation * _initialOffset;
 
+        // 회전된 원래 오프셋 방향으로 충돌 없이 확보할 수 있는 거리를 구한다.
         float desiredDistance = desiredOffset.magnitude;
 
         if (desiredDistance <= Mathf.Epsilon)
@@ -164,6 +181,7 @@ public class PlayerCameraController : MonoBehaviour
         Quaternion cameraRotation =
             orbitRotation * _initialRotation;
 
+        // 최종 위치와 회전에 같은 Orbit 결과를 사용해 카메라 축이 어긋나지 않게 한다.
         transform.SetPositionAndRotation(
             cameraPosition,
             cameraRotation

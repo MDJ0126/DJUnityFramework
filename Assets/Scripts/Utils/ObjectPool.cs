@@ -27,6 +27,9 @@ public class ObjectPool : MonoBehaviour
 
     private DateTime _lastRefreshedTime = DateTime.Now;
 
+    /// <summary>
+    /// 원본을 비활성화하고 인스펙터에 설정한 수만큼 풀을 미리 생성
+    /// </summary>
     private void Start()
     {
         original.SetActive(false);
@@ -39,6 +42,9 @@ public class ObjectPool : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 원본을 복제하여 풀의 기본 트랜스폼 상태로 등록
+    /// </summary>
     private PoolItem Create()
     {
         GameObject go = Instantiate(original);
@@ -54,6 +60,9 @@ public class ObjectPool : MonoBehaviour
         return item;
     }
 
+    /// <summary>
+    /// 비활성 오브젝트를 가져오고 부족하면 새로 생성
+    /// </summary>
     public GameObject Get()
     {
         var item = _pool.Find(poolItem => !poolItem.gameObject.activeSelf);
@@ -63,6 +72,9 @@ public class ObjectPool : MonoBehaviour
         return item.gameObject;
     }
 
+    /// <summary>
+    /// 비활성 오브젝트에서 요청한 컴포넌트를 가져오기
+    /// </summary>
     public T Get<T>() where T : Component
     {
         var item = _pool.Find(poolItem => !poolItem.gameObject.activeSelf);
@@ -72,12 +84,16 @@ public class ObjectPool : MonoBehaviour
         return item.gameObject.GetComponent<T>();
     }
 
+    /// <summary>
+    /// 일정 시간마다 장기간 사용하지 않은 비활성 오브젝트 정리
+    /// </summary>
     private void AutoReleaseMemory()
     {
         var nowTime = DateTime.Now;
         if (_lastRefreshedTime.AddSeconds(REFRESH_TIME_PER_SECONDS) < nowTime)
         {
             _lastRefreshedTime = nowTime;
+            // 삭제 중 인덱스가 밀리지 않도록 목록의 뒤에서부터 검사한다.
             for (int i = _pool.Count - 1; i >= 0; --i)
             {
                 var item = _pool[i];

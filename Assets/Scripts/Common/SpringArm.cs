@@ -45,8 +45,12 @@ public class SpringArm : MonoBehaviour
 
 #if UNITY_EDITOR
 
+    /// <summary>
+    /// 인스펙터 값 변경 시 실행 상태에 맞춰 카메라 설정 미리보기 갱신
+    /// </summary>
     private void OnValidate()
     {
+        // 플레이 중에는 현재 이 SpringArm에 연결된 카메라만 다시 바인딩한다.
         if (Application.isPlaying)
         {
             if (_playerCameraController)
@@ -59,6 +63,7 @@ public class SpringArm : MonoBehaviour
         }
         else
         {
+            // 편집 중에는 지연 코루틴으로 직렬화된 값이 반영된 다음 미리보기를 갱신한다.
             if (this.gameObject.activeInHierarchy)
                 StartCoroutine(DelayUpdate());
         }
@@ -67,6 +72,7 @@ public class SpringArm : MonoBehaviour
         {
             yield return null;
 
+            // 기본 Pawn의 SpringArm일 때만 메인 카메라 미리보기를 이동한다.
             var parentPawn = GetComponentInParent<Game.Pawn>();
             if (parentPawn && GameMode.Instance.defaultPawn && GameMode.Instance.defaultPawn.Equals(parentPawn))
             {
@@ -82,6 +88,9 @@ public class SpringArm : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 선택한 SpringArm의 Pivot 연결선과 카메라 방향을 씬 뷰에 표시
+    /// </summary>
     private void OnDrawGizmosSelected()
     {
         Gizmos.DrawLine(
@@ -89,6 +98,7 @@ public class SpringArm : MonoBehaviour
             CameraWorldPosition
         );
 
+        // 카메라의 월드 위치·회전을 기준으로 로컬 기즈모를 그린 뒤 기존 행렬을 복원한다.
         Matrix4x4 previousMatrix = Gizmos.matrix;
 
         Gizmos.matrix = Matrix4x4.TRS(

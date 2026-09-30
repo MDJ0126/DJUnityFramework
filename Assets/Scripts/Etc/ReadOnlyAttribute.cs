@@ -12,12 +12,18 @@ namespace UnityEditor
     public class ReadOnlyAttributeDrawer : PropertyDrawer
     {
         // Necessary since some properties tend to collapse smaller than their content
+        /// <summary>
+        /// 기본 프로퍼티 필드와 같은 높이 반환
+        /// </summary>
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             return EditorGUI.GetPropertyHeight(property, label, true);
         }
 
         // Draw a disabled property field
+        /// <summary>
+        /// 조건에 따라 GUI를 비활성화하여 읽기 전용 필드로 표시
+        /// </summary>
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             GUI.enabled = !Application.isPlaying && ((ReadOnlyAttribute)attribute).runtimeOnly;
@@ -33,6 +39,9 @@ public class ReadOnlyAttribute : PropertyAttribute
 {
     public readonly bool runtimeOnly;
 
+    /// <summary>
+    /// 런타임에만 잠글지 항상 잠글지 설정
+    /// </summary>
     public ReadOnlyAttribute(bool runtimeOnly = false)
     {
         this.runtimeOnly = runtimeOnly;

@@ -10,6 +10,9 @@ namespace Game
 
         #endregion
 
+        /// <summary>
+        /// 말풍선에 표시할 문구 설정
+        /// </summary>
         public void SetText(string text)
         {
             speechText.text = text;

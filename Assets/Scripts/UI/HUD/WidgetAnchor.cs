@@ -21,12 +21,18 @@ namespace Game
             }
         }
 
+        /// <summary>
+        /// WidgetAnchor를 HUD 타겟으로 바로 전달할 수 있도록 Transform으로 변환
+        /// </summary>
         public static implicit operator Transform(WidgetAnchor anchor)
         {
             return anchor.Transform;
         }
 
 #if UNITY_EDITOR
+        /// <summary>
+        /// 씬 뷰에서 HUD 앵커의 오브젝트 이름 표시
+        /// </summary>
         private void OnDrawGizmos()
         {
             var style = new GUIStyle(GUI.skin.label)
