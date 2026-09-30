@@ -28,6 +28,47 @@
 - 나만의 개발 방식과 코드 스타일을 꾸준히 정리하기
 - 실제 프로젝트에 빠르게 적용할 수 있는 기반 만들기
 
+## 프레임워크 구조
+
+```mermaid
+flowchart LR
+    GameMode[Game Mode] -->|기본 Pawn 빙의| Controller[Player Controller]
+
+    subgraph Control[캐릭터 제어]
+        Controller -->|카메라 기준 입력| Movement[Movement]
+        Movement -->|속도 · 상태| Animation[Animation & Foot IK]
+        Controller -->|화면 중앙 Raycast| Aim[Aim Target]
+    end
+
+    subgraph Camera[3인칭 카메라]
+        Controller -->|빙의 시 연결| CameraController[Camera Controller]
+        SpringArm[Spring Arm] -->|기준 위치 · 회전| CameraController
+        CameraController -->|Raycast · SphereCast| Collision[장애물 대응]
+    end
+
+    Controller --> Pawn[Pawn]
+
+    subgraph Gameplay[게임플레이 기반]
+        Pawn --> SkillManager[Skill Manager]
+        Pawn --> BuffManager[Buff Manager]
+        Pawn --> Status[Status]
+        SkillManager --> Skill[Skill]
+        BuffManager --> Buff[Buff]
+        Skill -->|효과 적용| Status
+        Buff -->|지속 효과| Status
+    end
+
+    subgraph UI[월드 추적 HUD]
+        Pawn --> Anchor[Widget Anchor]
+        Pawn -->|활성화 시 부착| HUDManager[HUD Manager]
+        HUDManager -->|재사용| Pool[Object Pool]
+        Pool --> FollowHUD[이름 · 말풍선 · 체력바]
+        Anchor -->|월드 좌표를 화면 좌표로 변환| FollowHUD
+    end
+```
+
+`GameMode`가 기본 `Pawn`을 빙의시키면 `PlayerController`가 이동, 조준, 카메라를 연결합니다. `Pawn`은 스킬·버프·스테이터스를 소유하고, HUD는 월드 오브젝트를 추적하며 오브젝트 풀을 통해 재사용됩니다.
+
 ## 개발된 기능
 
 ### 캐릭터 및 플레이어 제어
