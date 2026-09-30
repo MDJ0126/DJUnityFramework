@@ -112,31 +112,25 @@ flowchart TB
 
 ### 캐릭터 · 플레이어 제어
 
-| 기능 | 주요 내용 |
-| --- | --- |
-| [캐릭터](Assets/Scripts/InGame/Object/Pawn/Character/Character.cs) · [빙의](Assets/Scripts/InGame/Object/PlayerController.cs) | 컴포넌트 구성, 기본 캐릭터 빙의 및 입력 연결 |
-| [이동](Assets/Scripts/InGame/Object/Pawn/Movement.cs) | 카메라 기준 이동, 달리기·점프·회전, 지면·경사 판정 |
-| [애니메이션](Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.cs) · [Foot IK](Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.FootIK.cs) | 이동 상태 반영, 발 위치·몸체 높이 보정 |
-| [조준](Assets/Scripts/InGame/Object/Pawn/Character/AimTarget.cs) · [카메라](Assets/Scripts/Common/PlayerCameraController.cs) | 화면 중앙 조준, 궤도 회전, 장애물 대응 |
-| [스킬](Assets/Scripts/InGame/Skill/SkillManager.cs) · [버프](Assets/Scripts/InGame/Buff/BuffManager.cs) · [능력치](Assets/Scripts/InGame/Status/StatusInfo.cs) | 스킬·지속 효과 관리, 캐릭터 상태 데이터 |
+- [캐릭터](Assets/Scripts/InGame/Object/Pawn/Character/Character.cs) · [빙의](Assets/Scripts/InGame/Object/PlayerController.cs) — 컴포넌트 구성, 기본 캐릭터 빙의 및 입력 연결
+- [이동](Assets/Scripts/InGame/Object/Pawn/Movement.cs) — 카메라 기준 이동, 달리기·점프·회전, 지면·경사 판정
+- [애니메이션](Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.cs) · [Foot IK](Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.FootIK.cs) — 이동 상태 반영, 발 위치·몸체 높이 보정
+- [조준](Assets/Scripts/InGame/Object/Pawn/Character/AimTarget.cs) · [카메라](Assets/Scripts/Common/PlayerCameraController.cs) — 화면 중앙 조준, 궤도 회전, 장애물 대응
+- [스킬](Assets/Scripts/InGame/Skill/SkillManager.cs) · [버프](Assets/Scripts/InGame/Buff/BuffManager.cs) · [능력치](Assets/Scripts/InGame/Status/StatusInfo.cs) — 스킬·지속 효과 관리, 캐릭터 상태 데이터
 
 ### HUD
 
-| 기능 | 주요 내용 |
-| --- | --- |
-| [월드 추적](Assets/Scripts/UI/HUD/FollowHUD.cs) | 월드 좌표를 화면 좌표로 변환해 대상 추적 |
-| [HUD 관리](Assets/Scripts/UI/HUD/HUDManager.cs) | 이름·말풍선·체력바 부착 및 해제, 풀을 통한 재사용 |
-| [앵커](Assets/Scripts/UI/HUD/WidgetAnchor.cs) | HUD 기준점 설정, 씬 뷰 위치·이름 표시 |
+- [월드 추적](Assets/Scripts/UI/HUD/FollowHUD.cs) — 월드 좌표를 화면 좌표로 변환해 대상 추적
+- [HUD 관리](Assets/Scripts/UI/HUD/HUDManager.cs) — 이름·말풍선·체력바 부착 및 해제, 풀을 통한 재사용
+- [앵커](Assets/Scripts/UI/HUD/WidgetAnchor.cs) — HUD 기준점 설정, 씬 뷰 위치·이름 표시
 
 ### 유틸리티 · 에디터
 
-| 기능 | 주요 내용 |
-| --- | --- |
-| [싱글톤](Assets/Scripts/Utils/SingletonBehaviour.cs) · [일반 클래스용](Assets/Scripts/Utils/Singleton.cs) | 공용 인스턴스 관리 |
-| [오브젝트 풀](Assets/Scripts/Utils/ObjectPool.cs) · [코루틴 캐시](Assets/Scripts/Utils/YieldInstructionCache.cs) | 오브젝트와 대기 명령 재사용 |
-| [공통 도구](Assets/Scripts/Utils/Utils.cs) · [지면 타일링](Assets/Scripts/Common/GroundTiling.cs) | 카메라·레이어·확률·오브젝트 검색, 텍스처 크기 조절 |
-| [읽기 전용](Assets/Scripts/Etc/ReadOnlyAttribute.cs) · [표시 이름](Assets/Scripts/Etc/DisplayNameAttribute.cs) | 인스펙터 속성 표시 보조 |
-| [카메라 핸들](Assets/Scripts/Common/Editor/SpringArmEditor.cs) · [빙의 단축키](Assets/Scripts/Common/EditorPossessInput.cs) | 씬 뷰 카메라 편집, 캐릭터 제어 테스트 |
+- [싱글톤](Assets/Scripts/Utils/SingletonBehaviour.cs) · [일반 클래스용](Assets/Scripts/Utils/Singleton.cs) — 공용 인스턴스 관리
+- [오브젝트 풀](Assets/Scripts/Utils/ObjectPool.cs) · [코루틴 캐시](Assets/Scripts/Utils/YieldInstructionCache.cs) — 오브젝트와 대기 명령 재사용
+- [공통 도구](Assets/Scripts/Utils/Utils.cs) · [지면 타일링](Assets/Scripts/Common/GroundTiling.cs) — 카메라·레이어·확률·오브젝트 검색, 텍스처 크기 조절
+- [읽기 전용](Assets/Scripts/Etc/ReadOnlyAttribute.cs) · [표시 이름](Assets/Scripts/Etc/DisplayNameAttribute.cs) — 인스펙터 속성 표시 보조
+- [카메라 핸들](Assets/Scripts/Common/Editor/SpringArmEditor.cs) · [빙의 단축키](Assets/Scripts/Common/EditorPossessInput.cs) — 씬 뷰 카메라 편집, 캐릭터 제어 테스트
 
 ## 라이선스
 
