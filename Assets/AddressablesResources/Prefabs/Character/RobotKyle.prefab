@@ -481,12 +481,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f37b3ff61ef67b440a38b80fc20a656e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aimTarget: {fileID: 5417606405649275308}
-  headAim: {fileID: 1523574461798427728}
-  spineAim: {fileID: 4762411582296121005}
   nameAnchor: {fileID: 5044493540828683380}
   balloonAnchor: {fileID: 9096739266768584353}
   healthBarAnchor: {fileID: 2822149409002437330}
+  aimTarget:
+    target: {fileID: 5417606405649275308}
+    AimRig: {fileID: 4534822157157772568}
+  headAim: {fileID: 1523574461798427728}
+  spineAim: {fileID: 4762411582296121005}
 --- !u!114 &3883205718249109943
 MonoBehaviour:
   m_ObjectHideFlags: 0

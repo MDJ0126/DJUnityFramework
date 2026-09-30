@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 namespace Game
@@ -9,7 +10,7 @@ namespace Game
         [ReadOnly] [SerializeField] private Pawn _possessTarget = null;
 
         [Header("Aim Settings")]
-        [ReadOnly][SerializeField] private Transform _aimTarget = null;
+        [ReadOnly] public AimTarget aimTarget = null;
         public float aimDistance = 100f;
         public LayerMask aimMask;
 
@@ -70,26 +71,21 @@ namespace Game
         /// </summary>
         private void UpdateAimTarget()
         {
-            if (_aimTarget)
+            if (_possessTarget != null && aimTarget != null)
             {
-                if (_possessTarget.Movement.IsSprint)
-                {
-                    _possessTarget.spineAim.weight = 0f;
-                }
-                else
-                {
-                    _possessTarget.spineAim.weight = 1f;
-                }
+                Vector3 direction = (aimTarget.target.position - _possessTarget.Transform.position).normalized;
+                float dot = Vector3.Dot(_possessTarget.Transform.forward, direction);
+                float value01 = Mathf.InverseLerp(-1f, 1f, dot);
+                aimTarget.AimRig.weight = value01;
 
                 Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
-
                 if (Physics.Raycast(ray, out var hit, aimDistance, aimMask))
                 {
-                    _aimTarget.position = hit.point;
+                    aimTarget.target.position = hit.point;
                 }
                 else
                 {
-                    _aimTarget.position = ray.GetPoint(aimDistance);
+                    aimTarget.target.position = ray.GetPoint(aimDistance);
                 }
             }
         }
@@ -97,16 +93,16 @@ namespace Game
         /// <summary>
         /// 빙의
         /// </summary>
-        public void Possess(Pawn pawn = null)
+        public virtual void Possess(Pawn pawn = null)
         {
             if (pawn == null)
             {
                 pawn = _lastPossessTarget;
             }
-
             _possessTarget = pawn;
             _lastPossessTarget = pawn;
-            _aimTarget = pawn.aimTarget;
+            _possessTarget.Possess(this);
+
             _movement = _possessTarget.GetComponent<Movement>();
             var playerCameraController = Camera.main.GetComponent<PlayerCameraController>();
             playerCameraController.Bind(pawn.GetComponentInChildren<SpringArm>());
@@ -118,10 +114,10 @@ namespace Game
         /// <summary>
         /// 빙의 해제
         /// </summary>
-        public void Unpossess()
+        public virtual void Unpossess()
         {
-            _possessTarget.ResetAimTargetPosition();
-            _aimTarget = null;
+            _possessTarget.Unpossess(this);
+            aimTarget = null;
             _movement = null;
             IsPossessed = false;
             Cursor.visible = true;
