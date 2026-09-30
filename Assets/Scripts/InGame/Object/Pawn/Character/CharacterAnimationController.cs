@@ -21,7 +21,8 @@ namespace Game
 
         private void Update()
         {
-            _boneAnimator.SetFloat("Velocity", _owner.Movement.NormalizedVelocity);
+            _boneAnimator.SetFloat("Speed", _owner.Movement.NormalizedVelocity);
+            _boneAnimator.SetBool("IsSprint", _owner.Movement.IsSprint);
             _boneAnimator.SetBool("IsJumping", _movement.IsJumping);
             _boneAnimator.SetBool("IsFalling", _movement.IsFalling);
 
@@ -36,21 +37,20 @@ namespace Game
 
         private void UpdateMoveAnimation()
         {
-            Vector3 forward = transform.forward;
+            Vector3 velocity = _owner.Movement.Velocity;
+            velocity.y = 0f;
 
-            // 상하 조준은 이동 애니메이션 방향에 필요 없으므로 제거
-            forward.y = 0f;
-            forward.Normalize();
+            Vector3 localDir = Vector3.zero;
 
-            Vector3 right = Vector3.Cross(Vector3.up, forward);
+            if (velocity.sqrMagnitude > 0.001f)
+            {
+                localDir = transform.InverseTransformDirection(velocity.normalized);
+            }
 
-            Vector3 moveDir = Camera.main.transform.forward.normalized;
+            const float DAMP_TIME = 0.1f;
 
-            float posX = Vector3.Dot(moveDir, right);
-            float posY = Vector3.Dot(moveDir, forward);
-
-            _boneAnimator.SetFloat("PosX", posX);
-            _boneAnimator.SetFloat("PosY", posY);
+            _boneAnimator.SetFloat("PosX", localDir.x, DAMP_TIME, Time.deltaTime);
+            _boneAnimator.SetFloat("PosY", localDir.z, DAMP_TIME, Time.deltaTime);
         }
     }
 }

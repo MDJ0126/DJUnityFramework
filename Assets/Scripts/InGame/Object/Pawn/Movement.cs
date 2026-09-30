@@ -170,8 +170,16 @@ namespace Game
             angularVelocity.y = 0f;
             rigidbodyComp.angularVelocity = angularVelocity;
 
+            Vector3 direction;
+            if (IsSprint)
+            {
+                direction = MoveInput;
+            }
+            else
+            {
+                direction = Camera.main.transform.forward;
+            }
             // Yaw 축만 사용하기
-            Vector3 direction = MoveInput;
             direction.y = 0f;
 
             if (direction.sqrMagnitude < 0.001f) return;
