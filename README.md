@@ -32,6 +32,8 @@
 
 전체 연결과 캐릭터 내부 구성을 나누어 표시합니다. 전체 연결도에는 시스템 사이의 주요 연결만, 캐릭터 상세도에는 보유하거나 참조하는 구성 요소를 나열합니다.
 
+각 구성 요소를 클릭하면 대표 스크립트로 이동합니다.
+
 ### 전체 연결
 
 ```mermaid
@@ -43,6 +45,12 @@ flowchart LR
 
     classDef focus fill:#243b53,stroke:#63b3ed,color:#fff,stroke-width:2px
     class Character focus
+
+    click GameMode href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/Management/GameMode.cs" "GameMode.cs" _blank
+    click Controller href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Object/PlayerController.cs" "PlayerController.cs" _blank
+    click Character href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Object/Pawn/Character/Character.cs" "Character.cs" _blank
+    click Camera href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/Common/PlayerCameraController.cs" "PlayerCameraController.cs" _blank
+    click HUD href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/UI/HUD/HUDManager.cs" "HUDManager.cs" _blank
 ```
 
 ### 캐릭터 내부 구성
@@ -85,41 +93,50 @@ flowchart TB
 
     classDef focus fill:#243b53,stroke:#63b3ed,color:#fff,stroke-width:2px
     class Core focus
+
+    click Core href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Object/Pawn/Pawn.cs" "Pawn.cs" _blank
+    click Movement href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Object/Pawn/Movement.cs" "Movement.cs" _blank
+    click Animation href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.cs" "CharacterAnimationController.cs" _blank
+    click FootIK href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.FootIK.cs" "CharacterAnimationController.FootIK.cs" _blank
+    click Skills href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Skill/SkillManager.cs" "SkillManager.cs" _blank
+    click Buffs href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Buff/BuffManager.cs" "BuffManager.cs" _blank
+    click Status href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Status/StatusInfo.cs" "StatusInfo.cs" _blank
+    click Aim href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Object/Pawn/Character/AimTarget.cs" "AimTarget.cs" _blank
+    click SpringArm href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/Common/SpringArm.cs" "SpringArm.cs" _blank
+    click Anchor href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/UI/HUD/WidgetAnchor.cs" "WidgetAnchor.cs" _blank
 ```
 
 `GameMode`가 기본 `Pawn`의 빙의를 요청하면 `PlayerController`가 이동 입력, 조준 대상과 카메라를 연결합니다. 카메라는 캐릭터 하위의 `SpringArm`을 기준으로 움직이며, HUD는 `WidgetAnchor`를 추적하고 오브젝트 풀을 통해 재사용됩니다.
 
 ## 개발된 기능
 
-### 캐릭터 구성 및 플레이어 제어
+### 캐릭터 · 플레이어 제어
 
-캐릭터는 `Pawn`을 중심으로 필요한 기능을 독립된 컴포넌트로 구성하며, `PlayerController`가 캐릭터를 빙의해 입력을 전달합니다.
-
-- **Character / Pawn** — 이동·애니메이션 컴포넌트를 연결하고 스킬·버프·스테이터스를 관리하는 캐릭터 본체 — [Pawn.cs](Assets/Scripts/InGame/Object/Pawn/Pawn.cs), [Character.cs](Assets/Scripts/InGame/Object/Pawn/Character/Character.cs)
-- **Skill / Buff / Status** — 캐릭터가 소유하는 스킬, 지속 효과와 능력치 관리 구조 — [SkillManager.cs](Assets/Scripts/InGame/Skill/SkillManager.cs), [BuffManager.cs](Assets/Scripts/InGame/Buff/BuffManager.cs), [Status.cs](Assets/Scripts/InGame/Status/Status.cs)
-- **Movement Component** — 카메라 기준 이동, 달리기, 점프, 회전과 지면·경사면 판정 처리 — [Movement.cs](Assets/Scripts/InGame/Object/Pawn/Movement.cs)
-- **Animation Controller** — 이동 상태에 따른 애니메이션 갱신과 Foot IK 보정 — [CharacterAnimationController.cs](Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.cs), [CharacterAnimationController.FootIK.cs](Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.FootIK.cs)
-- **Aim Target** — 화면 중앙 Raycast를 이용한 조준 위치와 Aim Rig 가중치 갱신 — [PlayerController.cs](Assets/Scripts/InGame/Object/PlayerController.cs), [AimTarget.cs](Assets/Scripts/InGame/Object/Pawn/Character/AimTarget.cs)
-- **Spring Arm / Camera Controller** — 캐릭터별 카메라 기준점, 궤도 회전과 장애물 충돌 처리 — [SpringArm.cs](Assets/Scripts/Common/SpringArm.cs), [PlayerCameraController.cs](Assets/Scripts/Common/PlayerCameraController.cs)
-- **Possession** — Game Mode의 기본 캐릭터 자동 빙의 및 빙의 해제 — [GameMode.cs](Assets/Scripts/Management/GameMode.cs), [PlayerController.cs](Assets/Scripts/InGame/Object/PlayerController.cs)
+| 기능 | 주요 내용 |
+| --- | --- |
+| [캐릭터](Assets/Scripts/InGame/Object/Pawn/Character/Character.cs) · [빙의](Assets/Scripts/InGame/Object/PlayerController.cs) | 컴포넌트 구성, 기본 캐릭터 빙의 및 입력 연결 |
+| [이동](Assets/Scripts/InGame/Object/Pawn/Movement.cs) | 카메라 기준 이동, 달리기·점프·회전, 지면·경사 판정 |
+| [애니메이션](Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.cs) · [Foot IK](Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.FootIK.cs) | 이동 상태 반영, 발 위치·몸체 높이 보정 |
+| [조준](Assets/Scripts/InGame/Object/Pawn/Character/AimTarget.cs) · [카메라](Assets/Scripts/Common/PlayerCameraController.cs) | 화면 중앙 조준, 궤도 회전, 장애물 대응 |
+| [스킬](Assets/Scripts/InGame/Skill/SkillManager.cs) · [버프](Assets/Scripts/InGame/Buff/BuffManager.cs) · [능력치](Assets/Scripts/InGame/Status/StatusInfo.cs) | 스킬·지속 효과 관리, 캐릭터 상태 데이터 |
 
 ### HUD
 
-- 월드 오브젝트를 화면 좌표로 변환하여 추적하는 HUD — [FollowHUD.cs](Assets/Scripts/UI/HUD/FollowHUD.cs)
-- 이름표와 말풍선 HUD 부착 및 해제 — [HUDManager.cs](Assets/Scripts/UI/HUD/HUDManager.cs), [FollowName.cs](Assets/Scripts/UI/HUD/FollowName.cs), [FollowSpeechBubble.cs](Assets/Scripts/UI/HUD/FollowSpeechBubble.cs)
-- 오브젝트 풀을 이용한 추적 HUD 재사용 — [HUDManager.cs](Assets/Scripts/UI/HUD/HUDManager.cs), [ObjectPool.cs](Assets/Scripts/Utils/ObjectPool.cs)
-- 씬 뷰에서 HUD 앵커 위치 및 이름 표시 — [WidgetAnchor.cs](Assets/Scripts/UI/HUD/WidgetAnchor.cs)
+| 기능 | 주요 내용 |
+| --- | --- |
+| [월드 추적](Assets/Scripts/UI/HUD/FollowHUD.cs) | 월드 좌표를 화면 좌표로 변환해 대상 추적 |
+| [HUD 관리](Assets/Scripts/UI/HUD/HUDManager.cs) | 이름·말풍선·체력바 부착 및 해제, 풀을 통한 재사용 |
+| [앵커](Assets/Scripts/UI/HUD/WidgetAnchor.cs) | HUD 기준점 설정, 씬 뷰 위치·이름 표시 |
 
-### 공통 유틸리티 및 에디터 도구
+### 유틸리티 · 에디터
 
-- MonoBehaviour 및 일반 클래스용 싱글톤 — [SingletonBehaviour.cs](Assets/Scripts/Utils/SingletonBehaviour.cs), [Singleton.cs](Assets/Scripts/Utils/Singleton.cs)
-- 동적 생성과 미사용 오브젝트 정리를 지원하는 오브젝트 풀 — [ObjectPool.cs](Assets/Scripts/Utils/ObjectPool.cs)
-- Coroutine Yield Instruction 캐시 — [YieldInstructionCache.cs](Assets/Scripts/Utils/YieldInstructionCache.cs)
-- 카메라, 레이어, 확률, 씬 오브젝트 검색 관련 유틸리티 — [Utils.cs](Assets/Scripts/Utils/Utils.cs)
-- 인스펙터 읽기 전용 및 표시 이름 변경 어트리뷰트 — [ReadOnlyAttribute.cs](Assets/Scripts/Etc/ReadOnlyAttribute.cs), [DisplayNameAttribute.cs](Assets/Scripts/Etc/DisplayNameAttribute.cs)
-- 씬 뷰에서 Spring Arm 카메라 위치와 회전을 편집하는 핸들 — [SpringArmEditor.cs](Assets/Scripts/Common/Editor/SpringArmEditor.cs)
-- 에디터 테스트용 캐릭터(`Pawn`) 빙의 단축키 — [EditorPossessInput.cs](Assets/Scripts/Common/EditorPossessInput.cs)
-- 지면 크기에 맞춘 머티리얼 텍스처 타일링 — [GroundTiling.cs](Assets/Scripts/Common/GroundTiling.cs)
+| 기능 | 주요 내용 |
+| --- | --- |
+| [싱글톤](Assets/Scripts/Utils/SingletonBehaviour.cs) · [일반 클래스용](Assets/Scripts/Utils/Singleton.cs) | 공용 인스턴스 관리 |
+| [오브젝트 풀](Assets/Scripts/Utils/ObjectPool.cs) · [코루틴 캐시](Assets/Scripts/Utils/YieldInstructionCache.cs) | 오브젝트와 대기 명령 재사용 |
+| [공통 도구](Assets/Scripts/Utils/Utils.cs) · [지면 타일링](Assets/Scripts/Common/GroundTiling.cs) | 카메라·레이어·확률·오브젝트 검색, 텍스처 크기 조절 |
+| [읽기 전용](Assets/Scripts/Etc/ReadOnlyAttribute.cs) · [표시 이름](Assets/Scripts/Etc/DisplayNameAttribute.cs) | 인스펙터 속성 표시 보조 |
+| [카메라 핸들](Assets/Scripts/Common/Editor/SpringArmEditor.cs) · [빙의 단축키](Assets/Scripts/Common/EditorPossessInput.cs) | 씬 뷰 카메라 편집, 캐릭터 제어 테스트 |
 
 ## 라이선스
 
