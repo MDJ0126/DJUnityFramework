@@ -37,12 +37,25 @@
 ```mermaid
 ---
 config:
+  theme: base
+  themeVariables:
+    background: "#ffffff"
+    primaryColor: "#ffffff"
+    primaryTextColor: "#1e293b"
+    primaryBorderColor: "#94a3b8"
+    lineColor: "#64748b"
+    secondaryColor: "#f1f5f9"
+    tertiaryColor: "#f8fafc"
+    clusterBkg: "#f8fafc"
+    clusterBorder: "#cbd5e1"
+    titleColor: "#334155"
+    edgeLabelBackground: "#ffffff"
   themeCSS: |
     a, a:link, a:visited, a:hover, a:active, a:focus, a *,
     .node a, .node a:link, .node a:visited, .node a:hover,
     .node .nodeLabel, .node .nodeLabel *, .node text {
-      color: #e6edf3 !important;
-      fill: #e6edf3 !important;
+      color: #1e293b !important;
+      fill: #1e293b !important;
       text-decoration: none !important;
       text-decoration-line: none !important;
     }
@@ -53,8 +66,8 @@ flowchart LR
     Controller -->|Spring Arm 연결| Camera["Camera Controller<br/>궤도 회전 · 장애물 대응"]
     Character -->|HUD 부착 · 해제| HUD["HUD Manager<br/>Object Pool · 월드 추적 HUD"]
 
-    classDef default fill:#263445,stroke:#64748b,color:#e6edf3
-    classDef focus fill:#243b53,stroke:#63b3ed,color:#e6edf3,stroke-width:2px
+    classDef default fill:#ffffff,stroke:#94a3b8,color:#1e293b
+    classDef focus fill:#dbeafe,stroke:#3b82f6,color:#1e293b,stroke-width:2px
     class Character focus
 
     click GameMode href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/Management/GameMode.cs" "GameMode.cs 열기" _blank
@@ -71,12 +84,25 @@ flowchart LR
 ```mermaid
 ---
 config:
+  theme: base
+  themeVariables:
+    background: "#ffffff"
+    primaryColor: "#ffffff"
+    primaryTextColor: "#1e293b"
+    primaryBorderColor: "#94a3b8"
+    lineColor: "#64748b"
+    secondaryColor: "#f1f5f9"
+    tertiaryColor: "#f8fafc"
+    clusterBkg: "#f8fafc"
+    clusterBorder: "#cbd5e1"
+    titleColor: "#334155"
+    edgeLabelBackground: "#ffffff"
   themeCSS: |
     a, a:link, a:visited, a:hover, a:active, a:focus, a *,
     .node a, .node a:link, .node a:visited, .node a:hover,
     .node .nodeLabel, .node .nodeLabel *, .node text {
-      color: #e6edf3 !important;
-      fill: #e6edf3 !important;
+      color: #1e293b !important;
+      fill: #1e293b !important;
       text-decoration: none !important;
       text-decoration-line: none !important;
     }
@@ -113,8 +139,8 @@ flowchart TB
         end
     end
 
-    classDef default fill:#263445,stroke:#64748b,color:#e6edf3
-    classDef focus fill:#243b53,stroke:#63b3ed,color:#e6edf3,stroke-width:2px
+    classDef default fill:#ffffff,stroke:#94a3b8,color:#1e293b
+    classDef focus fill:#dbeafe,stroke:#3b82f6,color:#1e293b,stroke-width:2px
     class Core focus
 
     click Core href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Object/Pawn/Pawn.cs" "Pawn.cs 열기" _blank
