@@ -198,11 +198,6 @@ flowchart TB
 - **카메라 핸들 · 빙의 단축키**: 씬 뷰 카메라 편집, 캐릭터 제어 테스트\
   [SpringArmEditor.cs](Assets/Scripts/Common/Editor/SpringArmEditor.cs), [EditorPossessInput.cs](Assets/Scripts/Common/EditorPossessInput.cs)
 
-## 라이선스
-
-직접 작성한 코드는 [MIT License](LICENSE)에 따라 사용할 수 있습니다.  
-Unity 패키지와 서드파티 에셋에는 각 제작자가 정한 별도의 라이선스가 적용됩니다.
-
 ## 프로젝트 환경
 
 - **Unity:** 6000.0.83f1
@@ -238,6 +233,11 @@ Unity 패키지와 서드파티 에셋에는 각 제작자가 정한 별도의 �
   - Human Throwing Animations 2.0
   - Human Crafting Animations 2.2
   - Human Dance Animations 2.1
+
+## 라이선스
+
+직접 작성한 코드는 [MIT License](LICENSE)에 따라 사용할 수 있습니다.  
+Unity 패키지와 서드파티 에셋에는 각 제작자가 정한 별도의 라이선스가 적용됩니다.
 
 ---
 
