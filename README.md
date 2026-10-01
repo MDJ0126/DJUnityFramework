@@ -39,17 +39,17 @@
 config:
   theme: base
   themeVariables:
-    background: "#ffffff"
-    primaryColor: "#ffffff"
+    background: "#b8c7d9"
+    primaryColor: "#edf2f8"
     primaryTextColor: "#1e293b"
     primaryBorderColor: "#94a3b8"
     lineColor: "#64748b"
-    secondaryColor: "#f1f5f9"
-    tertiaryColor: "#f8fafc"
-    clusterBkg: "#f8fafc"
-    clusterBorder: "#cbd5e1"
+    secondaryColor: "#d6e0ed"
+    tertiaryColor: "#d6e0ed"
+    clusterBkg: "#d6e0ed"
+    clusterBorder: "#8da2ba"
     titleColor: "#334155"
-    edgeLabelBackground: "#ffffff"
+    edgeLabelBackground: "#d6e0ed"
   themeCSS: |
     a, a:link, a:visited, a:hover, a:active, a:focus, a *,
     .node a, .node a:link, .node a:visited, .node a:hover,
@@ -66,8 +66,8 @@ flowchart LR
     Controller -->|Spring Arm 연결| Camera["Camera Controller<br/>궤도 회전 · 장애물 대응"]
     Character -->|HUD 부착 · 해제| HUD["HUD Manager<br/>Object Pool · 월드 추적 HUD"]
 
-    classDef default fill:#ffffff,stroke:#94a3b8,color:#1e293b
-    classDef focus fill:#dbeafe,stroke:#3b82f6,color:#1e293b,stroke-width:2px
+    classDef default fill:#edf2f8,stroke:#8da2ba,color:#1e293b
+    classDef focus fill:#b9d3ef,stroke:#527fae,color:#1e293b,stroke-width:2px
     class Character focus
 
     click GameMode href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/Management/GameMode.cs" "GameMode.cs 열기" _blank
@@ -86,17 +86,17 @@ flowchart LR
 config:
   theme: base
   themeVariables:
-    background: "#ffffff"
-    primaryColor: "#ffffff"
+    background: "#b8c7d9"
+    primaryColor: "#edf2f8"
     primaryTextColor: "#1e293b"
     primaryBorderColor: "#94a3b8"
     lineColor: "#64748b"
-    secondaryColor: "#f1f5f9"
-    tertiaryColor: "#f8fafc"
-    clusterBkg: "#f8fafc"
-    clusterBorder: "#cbd5e1"
+    secondaryColor: "#d6e0ed"
+    tertiaryColor: "#d6e0ed"
+    clusterBkg: "#d6e0ed"
+    clusterBorder: "#8da2ba"
     titleColor: "#334155"
-    edgeLabelBackground: "#ffffff"
+    edgeLabelBackground: "#d6e0ed"
   themeCSS: |
     a, a:link, a:visited, a:hover, a:active, a:focus, a *,
     .node a, .node a:link, .node a:visited, .node a:hover,
@@ -139,9 +139,14 @@ flowchart TB
         end
     end
 
-    classDef default fill:#ffffff,stroke:#94a3b8,color:#1e293b
-    classDef focus fill:#dbeafe,stroke:#3b82f6,color:#1e293b,stroke-width:2px
+    classDef default fill:#edf2f8,stroke:#8da2ba,color:#1e293b
+    classDef focus fill:#b9d3ef,stroke:#527fae,color:#1e293b,stroke-width:2px
     class Core focus
+
+    style Character fill:#b8c7d9,stroke:#8da2ba,color:#1e293b
+    style Motion fill:#d6e0ed,stroke:#9bafc5,color:#1e293b
+    style Gameplay fill:#d6e0ed,stroke:#9bafc5,color:#1e293b
+    style Targets fill:#d6e0ed,stroke:#9bafc5,color:#1e293b
 
     click Core href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Object/Pawn/Pawn.cs" "Pawn.cs 열기" _blank
     click Movement href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Object/Pawn/Movement.cs" "Movement.cs 열기" _blank
