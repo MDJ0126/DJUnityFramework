@@ -1,0 +1,19 @@
+{
+    "version": 1,
+    "name": "EditorInput",
+    "maps": [
+        {
+            "name": "RobotKyle",
+            "id": "ef346138-5fb0-46ee-a610-9233eafdcb0c",
+            "actions": [],
+            "bindings": []
+        },
+        {
+            "name": "UI",
+            "id": "c166c192-8351-4ae5-907e-acfae6f96b0b",
+            "actions": [],
+            "bindings": []
+        }
+    ],
+    "controlSchemes": []
+}
