@@ -202,12 +202,11 @@ flowchart TB
 
 ## 프로젝트 환경
 
-- **Unity:** 6000.0.83f1
+### Unity 및 주요 패키지
 
-### 주요 패키지
-
-| 패키지 | 버전 |
+| 구성 요소 | 버전 |
 |---|---|
+| Unity Editor | 6000.0.83f1 |
 | Universal Render Pipeline (URP) | 17.0.4 |
 | Input System | 1.19.0 |
 | Cinemachine | 3.1.7 |
@@ -219,7 +218,7 @@ flowchart TB
 | Visual Scripting | 1.9.12 |
 | MCP for Unity | v10.0.0 |
 
-버전은 [Packages/manifest.json](Packages/manifest.json)에 선언된 값을 기준으로 합니다.
+Unity 버전은 [ProjectSettings/ProjectVersion.txt](ProjectSettings/ProjectVersion.txt), 패키지 버전은 [Packages/manifest.json](Packages/manifest.json)에 선언된 값을 기준으로 합니다.
 
 ### 외부 에셋
 
