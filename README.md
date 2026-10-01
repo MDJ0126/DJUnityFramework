@@ -207,6 +207,38 @@ Unity 패키지와 서드파티 에셋에는 각 제작자가 정한 별도의 �
 
 - **Unity:** 6000.0.83f1
 
+### 주요 패키지
+
+| 패키지 | 버전 |
+|---|---|
+| Universal Render Pipeline (URP) | 17.0.4 |
+| Input System | 1.19.0 |
+| Cinemachine | 3.1.7 |
+| Animation Rigging | 1.4.1 |
+| Addressables | 2.9.1 |
+| AI Navigation | 2.0.14 |
+| Behavior | 1.0.16 |
+| Timeline | 1.8.13 |
+| Visual Scripting | 1.9.12 |
+| MCP for Unity | v10.0.0 |
+
+버전은 [Packages/manifest.json](Packages/manifest.json)에 선언된 값을 기준으로 합니다.
+
+### 외부 에셋
+
+- **Robot Kyle**: 로봇 캐릭터 모델 및 관련 리소스
+- **Starter Assets**: 1인칭·3인칭 컨트롤러 및 샘플 리소스
+- **Kevin Iglesias — Human Character Dummy**: 남녀 더미 캐릭터 모델
+- **Kevin Iglesias — Human Animations (FREE)**:
+  - Human Basic Motions 2.4
+  - Human Archer Animations 2.0
+  - Human Melee Animations 2.0
+  - Human Soldier Animations 2.0
+  - Human Spellcasting Animations 2.0
+  - Human Throwing Animations 2.0
+  - Human Crafting Animations 2.2
+  - Human Dance Animations 2.1
+
 ---
 
 > 개인 프레임워크이자 코드 샘플 모음으로, 필요한 기능을 독립적으로 구현하고 지속적으로 개선합니다.
