@@ -1,12 +1,5 @@
 fileFormatVersion: 2
 guid: dd95fd526fbaddd4e96feb1b5b051f7f
-AssetOrigin:
-  serializedVersion: 1
-  productId: 157744
-  packageName: Human Basic Motions
-  packageVersion: 2.5
-  assetPath: Assets/Kevin Iglesias/Human Animations/Scripts/SpineProxy.cs
-  uploadId: 907844
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -16,3 +9,10 @@ MonoImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 157744
+  packageName: Human Basic Motions
+  packageVersion: 2.5
+  assetPath: Assets/Kevin Iglesias/Human Animations/Scripts/SpineProxy.cs
+  uploadId: 907844
