@@ -1,13 +1,13 @@
 <div align="center">
 
-# DJ Unity Framework
+# Framework for Unity
 
 **게임 개발에 필요한 기능을 직접 만들고 쌓아가는 개인용 Unity 프레임워크**
 
 ![Unity](https://img.shields.io/badge/Unity-6000.0.83f1-000000?style=flat-square&logo=unity&logoColor=white)
 ![Purpose](https://img.shields.io/badge/Purpose-Personal_Framework_%26_Code_Samples-6C63FF?style=flat-square)
 
-![DJ Unity Framework](docs/images/thumbnail.png)
+![Framework for Unity](docs/images/thumbnail.png)
 
 </div>
 
@@ -70,11 +70,11 @@ flowchart LR
     classDef focus fill:#b9d3ef,stroke:#527fae,color:#1e293b,stroke-width:2px
     class Character focus
 
-    click GameMode href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/Management/GameMode.cs" "GameMode.cs 열기" _blank
-    click Controller href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Object/PlayerController.cs" "PlayerController.cs 열기" _blank
-    click Character href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Object/Pawn/Character/Character.cs" "Character.cs 열기" _blank
-    click Camera href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/Common/PlayerCameraController.cs" "PlayerCameraController.cs 열기" _blank
-    click HUD href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/UI/HUD/HUDManager.cs" "HUDManager.cs 열기" _blank
+    click GameMode href "https://github.com/MDJ0126/FrameworkForUnity/blob/main/Assets/Scripts/Management/GameMode.cs" "GameMode.cs 열기" _blank
+    click Controller href "https://github.com/MDJ0126/FrameworkForUnity/blob/main/Assets/Scripts/InGame/Object/PlayerController.cs" "PlayerController.cs 열기" _blank
+    click Character href "https://github.com/MDJ0126/FrameworkForUnity/blob/main/Assets/Scripts/InGame/Object/Pawn/Character/Character.cs" "Character.cs 열기" _blank
+    click Camera href "https://github.com/MDJ0126/FrameworkForUnity/blob/main/Assets/Scripts/Common/PlayerCameraController.cs" "PlayerCameraController.cs 열기" _blank
+    click HUD href "https://github.com/MDJ0126/FrameworkForUnity/blob/main/Assets/Scripts/UI/HUD/HUDManager.cs" "HUDManager.cs 열기" _blank
 ```
 
 ### 캐릭터 내부 구성
@@ -148,15 +148,15 @@ flowchart TB
     style Gameplay fill:#d6e0ed,stroke:#9bafc5,color:#1e293b
     style Targets fill:#d6e0ed,stroke:#9bafc5,color:#1e293b
 
-    click Core href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Object/Pawn/Pawn.cs" "Pawn.cs 열기" _blank
-    click Movement href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Object/Pawn/Movement.cs" "Movement.cs 열기" _blank
-    click Animation href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.cs" "CharacterAnimationController.cs 열기" _blank
-    click Skills href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Skill/SkillManager.cs" "SkillManager.cs 열기" _blank
-    click Buffs href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Buff/BuffManager.cs" "BuffManager.cs 열기" _blank
-    click Status href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Status/StatusInfo.cs" "StatusInfo.cs 열기" _blank
-    click Aim href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/InGame/Object/Pawn/Character/AimTarget.cs" "AimTarget.cs 열기" _blank
-    click SpringArm href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/Common/SpringArm.cs" "SpringArm.cs 열기" _blank
-    click Anchor href "https://github.com/MDJ0126/DJUnityFramework/blob/main/Assets/Scripts/UI/HUD/WidgetAnchor.cs" "WidgetAnchor.cs 열기" _blank
+    click Core href "https://github.com/MDJ0126/FrameworkForUnity/blob/main/Assets/Scripts/InGame/Object/Pawn/Pawn.cs" "Pawn.cs 열기" _blank
+    click Movement href "https://github.com/MDJ0126/FrameworkForUnity/blob/main/Assets/Scripts/InGame/Object/Pawn/Movement.cs" "Movement.cs 열기" _blank
+    click Animation href "https://github.com/MDJ0126/FrameworkForUnity/blob/main/Assets/Scripts/InGame/Object/Pawn/Character/CharacterAnimationController.cs" "CharacterAnimationController.cs 열기" _blank
+    click Skills href "https://github.com/MDJ0126/FrameworkForUnity/blob/main/Assets/Scripts/InGame/Skill/SkillManager.cs" "SkillManager.cs 열기" _blank
+    click Buffs href "https://github.com/MDJ0126/FrameworkForUnity/blob/main/Assets/Scripts/InGame/Buff/BuffManager.cs" "BuffManager.cs 열기" _blank
+    click Status href "https://github.com/MDJ0126/FrameworkForUnity/blob/main/Assets/Scripts/InGame/Status/StatusInfo.cs" "StatusInfo.cs 열기" _blank
+    click Aim href "https://github.com/MDJ0126/FrameworkForUnity/blob/main/Assets/Scripts/InGame/Object/Pawn/Character/AimTarget.cs" "AimTarget.cs 열기" _blank
+    click SpringArm href "https://github.com/MDJ0126/FrameworkForUnity/blob/main/Assets/Scripts/Common/SpringArm.cs" "SpringArm.cs 열기" _blank
+    click Anchor href "https://github.com/MDJ0126/FrameworkForUnity/blob/main/Assets/Scripts/UI/HUD/WidgetAnchor.cs" "WidgetAnchor.cs 열기" _blank
 ```
 
 `GameMode`가 기본 `Pawn`의 빙의를 요청하면 `PlayerController`가 이동 입력, 조준 대상과 카메라를 연결합니다. 카메라는 캐릭터 하위의 `SpringArm`을 기준으로 움직이며, HUD는 `WidgetAnchor`를 추적하고 오브젝트 풀을 통해 재사용됩니다.
