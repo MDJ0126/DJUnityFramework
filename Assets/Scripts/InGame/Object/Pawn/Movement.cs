@@ -56,9 +56,9 @@ namespace Game
         /// </summary>
         protected virtual void FixedUpdate()
         {
-            CheckCanMove();
             CheckGround();
             CheckJumpState();
+            CheckCanMove();
             UpdateMovement();
             UpdateRotation();
         }
@@ -68,6 +68,13 @@ namespace Game
         /// </summary>
         private void CheckCanMove()
         {
+            // 착지 후에는 기존 속도와 관계없이 이동 및 감속 처리를 재개한다.
+            if (IsGrounded && !IsJumping)
+            {
+                IsCanMove = true;
+                return;
+            }
+
             if (IsFalling && HorizontalVelocity.sqrMagnitude > 0f)
             {
                 IsCanMove = false;
