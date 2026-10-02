@@ -225,6 +225,8 @@ Unity 버전은 [ProjectSettings/ProjectVersion.txt](ProjectSettings/ProjectVers
 - **Robot Kyle**: 로봇 캐릭터 모델 및 관련 리소스
 - **Starter Assets**: 1인칭·3인칭 컨트롤러 및 샘플 리소스
 - **Kevin Iglesias — Human Character Dummy**: 남녀 더미 캐릭터 모델
+- **Low Poly Weapons VOL.1**: 현대 화기와 장비 모델 및 프리팹
+- **PurePoly — Free Fantasy RPG Weapons**: 판타지 무기와 장비 모델 및 프리팹
 - **Kevin Iglesias — Human Animations (FREE)**:
   - Human Basic Motions 2.4
   - Human Archer Animations 2.0
