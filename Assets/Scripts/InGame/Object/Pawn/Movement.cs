@@ -6,6 +6,7 @@ namespace Game
     public abstract class Movement : MonoBehaviour
     {
         private const float CAN_JUMP_TIME = 0.2f;
+        private const float GROUND_STICK_SPEED = 2f;
 
         #region Inspector
 
@@ -158,16 +159,14 @@ namespace Game
 
             Vector3 inputDir = MoveInput.normalized;
             Vector3 moveDir = inputDir;
-            bool isSlope = false;
+            Vector3 groundNormal = Vector3.up;
 
             // 현재 지면의 법선을 구해 경사면을 따라 움직일 방향을 만든다.
             Ray ray = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
 
             if (Physics.Raycast(ray, out RaycastHit hit, 1.2f, groundLayer, QueryTriggerInteraction.Ignore))
             {
-                float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
-                isSlope = slopeAngle > 1f;
-
+                groundNormal = hit.normal;
                 moveDir = Vector3.ProjectOnPlane(inputDir, hit.normal).normalized;
                 Debug.DrawRay(hit.point, hit.normal, Color.red);
             }
@@ -184,10 +183,14 @@ namespace Game
 
             HorizontalVelocity = horizontalVelocity;
 
-            // 수평 이동만 보간하고 중력으로 계산된 수직 속도는 보존한다.
+            // 보간한 수평 속도에 맞춰 경사면 접선의 수직 속도를 계산한다.
+            // 이 함수는 접지 중이며 점프하지 않을 때만 실행된다.
             float verticalVelocity = currentVelocity.y;
-
-            if (!isSlope && verticalVelocity > 0f) verticalVelocity = 0f;
+            if (groundNormal.y > 0.01f)
+            {
+                verticalVelocity = -(groundNormal.x * horizontalVelocity.x + groundNormal.z * horizontalVelocity.z) / groundNormal.y;
+                verticalVelocity -= GROUND_STICK_SPEED;
+            }
 
             rigidbodyComp.linearVelocity = new Vector3(horizontalVelocity.x, verticalVelocity, horizontalVelocity.z);
         }
