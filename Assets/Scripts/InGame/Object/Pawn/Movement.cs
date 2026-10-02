@@ -185,14 +185,21 @@ namespace Game
 
             // 보간한 수평 속도에 맞춰 경사면 접선의 수직 속도를 계산한다.
             // 이 함수는 접지 중이며 점프하지 않을 때만 실행된다.
-            float verticalVelocity = currentVelocity.y;
+            Vector3 groundVelocity = new Vector3(horizontalVelocity.x, currentVelocity.y, horizontalVelocity.z);
             if (groundNormal.y > 0.01f)
             {
-                verticalVelocity = -(groundNormal.x * horizontalVelocity.x + groundNormal.z * horizontalVelocity.z) / groundNormal.y;
-                verticalVelocity -= GROUND_STICK_SPEED;
+                groundVelocity.y = -(groundNormal.x * horizontalVelocity.x + groundNormal.z * horizontalVelocity.z) / groundNormal.y;
+                // 지면 법선 안쪽으로 눌러 접지 속도가 내리막 이동을 만들지 않게 한다.
+                groundVelocity -= groundNormal * GROUND_STICK_SPEED;
+
+                // 마찰 없이도 접지 중 중력의 경사면 방향 성분이 누적되지 않게 한다.
+                if (rigidbodyComp.useGravity)
+                {
+                    rigidbodyComp.AddForce(-Vector3.ProjectOnPlane(Physics.gravity, groundNormal), ForceMode.Acceleration);
+                }
             }
 
-            rigidbodyComp.linearVelocity = new Vector3(horizontalVelocity.x, verticalVelocity, horizontalVelocity.z);
+            rigidbodyComp.linearVelocity = groundVelocity;
         }
 
         /// <summary>
