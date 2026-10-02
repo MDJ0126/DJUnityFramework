@@ -12,6 +12,7 @@ namespace Game
         public MultiAimConstraint spineAim;
 
         #endregion
+        public CharacterAnimationController CharacterAnimationController { get; private set; }
         public Vector3 AimTargetDefault { get; private set; }
 
         /// <summary>
@@ -21,6 +22,7 @@ namespace Game
         {
             base.Awake();
             AimTargetDefault = aimTarget.target.localPosition;
+            CharacterAnimationController = GetComponent<CharacterAnimationController>();
         }
 
         /// <summary>

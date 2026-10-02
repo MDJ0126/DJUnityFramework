@@ -1,24 +1,23 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Game
 {
     [RequireComponent(typeof(Animator))]
-    public partial class CharacterAnimationController : AnimationController
+    public abstract partial class CharacterAnimationController : PawnAnimationController
     {
-        private Character _owner;
-        private Animator _boneAnimator;
+        private Character _character;
         private Movement _movement;
         private LayerMask _groundLayer;
 
         /// <summary>
         /// 애니메이션 갱신에 필요한 소유 캐릭터, 이동, Animator 및 지면 레이어 캐싱
         /// </summary>
-        private void Awake()
+        protected override void Awake()
         {
-            _owner = GetComponentInParent<Character>();
-            _movement = _owner.GetComponent<Movement>();
-            _boneAnimator = GetComponent<Animator>();
+            base.Awake();
+            _character = GetComponentInParent<Character>();
+            _movement = _character.GetComponent<Movement>();
+            boneAnimator = GetComponent<Animator>();
             _groundLayer = LayerMask.GetMask("Ground");
         }
 
@@ -27,21 +26,11 @@ namespace Game
         /// </summary>
         private void Update()
         {
-            _boneAnimator.SetFloat("Speed", _owner.Movement.NormalizedHorizontalVelocity);
-            _boneAnimator.SetBool("IsSprint", _owner.Movement.IsSprint);
-            _boneAnimator.SetBool("IsJumping", _movement.IsJumping);
-            _boneAnimator.SetBool("IsFalling", _movement.IsFalling);
-
+            boneAnimator.SetFloat("Speed", _character.Movement.NormalizedHorizontalVelocity);
+            boneAnimator.SetBool("IsSprint", _character.Movement.IsSprint);
+            boneAnimator.SetBool("IsJumping", _movement.IsJumping);
+            boneAnimator.SetBool("IsFalling", _movement.IsFalling);
             UpdateMoveAnimation();
-        }
-
-        /// <summary>
-        /// 테스트 액션 트리거 실행
-        /// </summary>
-        public override void PlayActionTest()
-        {
-            base.PlayActionTest();
-            _boneAnimator.SetTrigger("ActionTest");
         }
 
         /// <summary>
@@ -49,12 +38,12 @@ namespace Game
         /// </summary>
         private void UpdateMoveAnimation()
         {
-            Vector3 velocity = _owner.Movement.HorizontalVelocity;
+            Vector3 velocity = _character.Movement.HorizontalVelocity;
 
             Vector3 localDir = Vector3.zero;
 
             // 실제 이동 중일 때만 전후·좌우 방향값을 계산한다.
-            if (_owner.Movement.IsCanMove && velocity.sqrMagnitude > 0.001f)
+            if (_character.Movement.IsCanMove && velocity.sqrMagnitude > 0.001f)
             {
                 localDir = transform.InverseTransformDirection(velocity.normalized);
             }
@@ -62,8 +51,8 @@ namespace Game
             const float DAMP_TIME = 0.1f;
 
             // 급격한 방향 전환에도 블렌드 값이 튀지 않도록 댐핑한다.
-            _boneAnimator.SetFloat("PosX", localDir.x, DAMP_TIME, Time.deltaTime);
-            _boneAnimator.SetFloat("PosY", localDir.z, DAMP_TIME, Time.deltaTime);
+            boneAnimator.SetFloat("PosX", localDir.x, DAMP_TIME, Time.deltaTime);
+            boneAnimator.SetFloat("PosY", localDir.z, DAMP_TIME, Time.deltaTime);
         }
     }
 }

@@ -10,6 +10,7 @@ namespace Game
 
         #region Inspector
 
+        public bool isMoveEnable = true;
         public float maxSpeed = 10f;
         public float walkMaxSpeed = 3f;
         public float acceleration = 100f;
@@ -150,12 +151,17 @@ namespace Game
             }
         }
 
+        public void StopMove()
+        {
+            rigidbodyComp.linearVelocity = Vector3.zero;
+        }
+
         /// <summary>
         /// 이동 업데이트
         /// </summary>
         private void UpdateMovement()
         {
-            if (!IsGrounded || IsJumping || !IsCanMove) return;
+            if (!isMoveEnable || !IsGrounded || IsJumping || !IsCanMove) return;
 
             Vector3 inputDir = MoveInput.normalized;
             Vector3 moveDir = inputDir;

@@ -6,9 +6,17 @@ namespace Game
     {
         #region Inspector
 
-        public Transform leftHandleSocket;
-        public Transform rightHandleSocket;
+        public Socket leftHandleSocket;
+        public Socket rightHandleSocket;
 
         #endregion
+
+        public RobotKyleAnimationController RobotKyleAnimationController { get; private set; }
+
+        protected override void Awake()
+        {
+            base.Awake();
+            RobotKyleAnimationController = GetComponentInChildren<RobotKyleAnimationController>();
+        }
     }
 }

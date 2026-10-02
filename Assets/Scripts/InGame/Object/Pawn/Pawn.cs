@@ -17,7 +17,7 @@ namespace Game
         public SkillManager SkillManager { get; private set; } = new();
         public BuffManager BuffManager { get; private set; } = new();
         public Movement Movement { get; private set; }
-        public AnimationController AnimationController { get; private set; }
+        public PawnAnimationController PawnAnimationController { get; private set; }
         protected List<FollowHUD> followHUDs = new();
 
         /// <summary>
@@ -27,7 +27,8 @@ namespace Game
         {
             base.Awake();
             Movement = GetComponent<Movement>();
-            AnimationController = GetComponentInChildren<AnimationController>();
+            PawnAnimationController = GetComponentInChildren<PawnAnimationController>();
+            Initalize();
         }
 
         /// <summary>
@@ -48,6 +49,14 @@ namespace Game
             base.LateUpdate();
             SkillManager.UpdateTick(Time.deltaTime);
             BuffManager.UpdateTick(Time.deltaTime);
+        }
+
+        /// <summary>
+        /// 최초 초기화
+        /// </summary>
+        protected virtual void Initalize()
+        {
+
         }
 
         /// <summary>

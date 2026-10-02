@@ -95,6 +95,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6181972841699375133}
+  - component: {fileID: 8731961103295865384}
   m_Layer: 0
   m_Name: RightSocketSocket
   m_TagString: Untagged
@@ -118,6 +119,18 @@ Transform:
   - {fileID: 7198959701644367777}
   m_Father: {fileID: 1084692116306545417}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8731961103295865384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1354057695563307347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dbbd81434d0092458e933f1776f3418, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2221371968393931168
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,6 +261,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5056349204789575767}
+  - component: {fileID: 4276673416434548814}
   m_Layer: 0
   m_Name: LeftHandleSocket
   m_TagString: Untagged
@@ -270,6 +284,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1084692116306545529}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4276673416434548814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5122506333870964067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dbbd81434d0092458e933f1776f3418, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5345720986803965041
 GameObject:
   m_ObjectHideFlags: 0
@@ -552,8 +578,8 @@ MonoBehaviour:
     AimRig: {fileID: 4534822157157772568}
   headAim: {fileID: 1523574461798427728}
   spineAim: {fileID: 4762411582296121005}
-  leftHandleSocket: {fileID: 5056349204789575767}
-  rightHandleSocket: {fileID: 6181972841699375133}
+  leftHandleSocket: {fileID: 4276673416434548814}
+  rightHandleSocket: {fileID: 8731961103295865384}
 --- !u!114 &3883205718249109943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -678,7 +704,7 @@ PrefabInstance:
       addedObject: {fileID: 3110816176946054421}
     - targetCorrespondingSourceObject: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5425527167175799275}
+      addedObject: {fileID: 3925744665302652414}
     - targetCorrespondingSourceObject: {fileID: 100096, guid: 320b1c2af77554f99a1658df4a6d3d5c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 852963316712483292}
@@ -713,7 +739,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &5425527167175799275
+--- !u!114 &3925744665302652414
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -722,7 +748,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1084692116306253527}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2f083c5b4f5cb743b2014c2734d03ad, type: 3}
+  m_Script: {fileID: 11500000, guid: f6d7975e10e87e442820b417004aefe3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   footRayStartHeight: 0.5

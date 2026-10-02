@@ -37,7 +37,7 @@ namespace Game
         /// </summary>
         private void OnAnimatorIK(int layerIndex)
         {
-            if (!_boneAnimator)
+            if (!boneAnimator)
                 return;
 
             // 이동·점프·낙하 중에는 원본 애니메이션을 유지하고 정지 상태에서만 IK를 적용한다.
@@ -45,7 +45,7 @@ namespace Game
                 _movement.IsGrounded &&
                 !_movement.IsJumping &&
                 !_movement.IsFalling &&
-                _owner.Movement.NormalizedHorizontalVelocity < 0.001f;
+                _character.Movement.NormalizedHorizontalVelocity < 0.001f;
 
             if (!isIdle)
             {
@@ -69,8 +69,8 @@ namespace Game
         {
             FootIKData data = new FootIKData();
 
-            data.footPosition = _boneAnimator.GetIKPosition(foot);
-            data.footRotation = _boneAnimator.GetIKRotation(foot);
+            data.footPosition = boneAnimator.GetIKPosition(foot);
+            data.footRotation = boneAnimator.GetIKRotation(foot);
 
             // 애니메이션 발 위치 위에서 아래로 Ray를 쏴 단차가 있는 지면도 찾는다.
             Vector3 rayOrigin = data.footPosition + Vector3.up * footRayStartHeight;
@@ -120,9 +120,9 @@ namespace Game
                 bodyAdjustSpeed * Time.deltaTime
             );
 
-            Vector3 bodyPosition = _boneAnimator.bodyPosition;
+            Vector3 bodyPosition = boneAnimator.bodyPosition;
             bodyPosition.y += _currentBodyOffset;
-            _boneAnimator.bodyPosition = bodyPosition;
+            boneAnimator.bodyPosition = bodyPosition;
         }
 
         /// <summary>
@@ -138,8 +138,8 @@ namespace Game
 
             SetFootIKWeight(foot, 1f);
 
-            _boneAnimator.SetIKPosition(foot, data.targetPosition);
-            _boneAnimator.SetIKRotation(foot, data.targetRotation);
+            boneAnimator.SetIKPosition(foot, data.targetPosition);
+            boneAnimator.SetIKRotation(foot, data.targetRotation);
         }
 
         /// <summary>
@@ -147,8 +147,8 @@ namespace Game
         /// </summary>
         private void SetFootIKWeight(AvatarIKGoal foot, float weight)
         {
-            _boneAnimator.SetIKPositionWeight(foot, weight * ikPositionWeight);
-            _boneAnimator.SetIKRotationWeight(foot, weight * ikRotationWeight);
+            boneAnimator.SetIKPositionWeight(foot, weight * ikPositionWeight);
+            boneAnimator.SetIKRotationWeight(foot, weight * ikRotationWeight);
         }
 
         /// <summary>

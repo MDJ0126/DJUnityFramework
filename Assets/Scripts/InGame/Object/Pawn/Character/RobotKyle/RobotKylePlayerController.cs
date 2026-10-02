@@ -5,8 +5,15 @@ namespace Game
 {
     public class RobotKylePlayerController : PlayerController
     {
+        private RobotKyle _owner = null;
         private float horizontal;
         private float vertical;
+
+        public override void Possess(Pawn pawn = null)
+        {
+            base.Possess(pawn);
+            _owner = pawn as RobotKyle;
+        }
 
         /// <summary>
         /// 가로 이동 입력 이벤트
@@ -41,7 +48,7 @@ namespace Game
 
             Vector3 cameraRight = Vector3.Cross(Vector3.up, cameraForward).normalized;
 
-            possessTarget.Movement.MoveInput = cameraForward * input.y + cameraRight * input.x;
+            _owner.Movement.MoveInput = cameraForward * input.y + cameraRight * input.x;
         }
 
         /// <summary>
@@ -50,7 +57,7 @@ namespace Game
         /// <param name="value"></param>
         private void OnSprint(InputValue value)
         {
-            possessTarget.Movement.IsSprint = value.isPressed;
+            _owner.Movement.IsSprint = value.isPressed;
         }
 
         /// <summary>
@@ -59,7 +66,7 @@ namespace Game
         /// <param name="value"></param>
         private void OnJump(InputValue value)
         {
-            possessTarget.Movement.Jump();
+            _owner.Movement.Jump();
         }
 
         /// <summary>
@@ -67,8 +74,9 @@ namespace Game
         /// </summary>
         private void OnNormalAttack(InputValue value)
         {
-            possessTarget.AnimationController.PlayActionTest();
+            _owner.RobotKyleAnimationController.StartAttack();
         }
+
         private void Update()
         {
             UpdateMoveInput();
