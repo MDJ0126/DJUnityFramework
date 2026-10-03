@@ -1,11 +1,13 @@
+using TMPro;
 using UnityEngine.UI;
 
 namespace Game
 {
-    public class FollowHealthBar : FollowHUD
+    public class FollowPawnInfo : FollowHUD
     {
         #region Inspector
 
+        public TMP_Text nameText;
         public Image fillImage;
 
         #endregion
@@ -23,11 +25,14 @@ namespace Game
         }
 
         /// <summary>
-        /// 체력 정보를 표시할 Pawn 연결
+        /// Pawn 세팅
         /// </summary>
         public void SetPawn(Pawn pawn)
         {
             _pawn = pawn;
+
+            nameText.text = pawn.Name;
+
             pawn.Status.OnChangedHp += OnChangedHp;
             //pawn.BaseStatus.OnChangedMp += OnChangedMp;
 

@@ -12,7 +12,7 @@ namespace Game
         public override void Possess(Pawn pawn = null)
         {
             base.Possess(pawn);
-            _owner = pawn as RobotKyle;
+            _owner = possessTarget as RobotKyle;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Game
         /// </summary>
         private void UpdateMoveInput()
         {
-            if (!possessTarget) return;
+            if (!_owner) return;
 
             Vector2 input = Vector2.ClampMagnitude(new Vector2(horizontal, vertical), 1f);
 
@@ -57,6 +57,8 @@ namespace Game
         /// <param name="value"></param>
         private void OnSprint(InputValue value)
         {
+            if (!_owner) return;
+
             _owner.Movement.IsSprint = value.isPressed;
         }
 
@@ -66,6 +68,8 @@ namespace Game
         /// <param name="value"></param>
         private void OnJump(InputValue value)
         {
+            if (!_owner) return;
+
             _owner.Movement.Jump();
         }
 
@@ -74,6 +78,8 @@ namespace Game
         /// </summary>
         private void OnNormalAttack(InputValue value)
         {
+            if (!_owner) return;
+
             _owner.RobotKyleAnimationController.StartAttack();
         }
 

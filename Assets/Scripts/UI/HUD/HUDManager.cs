@@ -4,9 +4,8 @@ namespace Game
 {
     public class HUDManager : SingletonBehaviour<HUDManager>
     {
-        public ObjectPool followNamePool;
+        public ObjectPool followPawnInfoPool;
         public ObjectPool followSpeechBubblePool;
-        public ObjectPool followHealthBarPool;
 
         /// <summary>
         /// Pawn에 연결된 모든 추적 HUD 숨기기
@@ -30,13 +29,12 @@ namespace Game
         /// <summary>
         /// 이름 HUD를 풀에서 가져와 Pawn의 이름 앵커에 연결
         /// </summary>
-        public FollowName AttachFollowName(Pawn pawn, string name)
+        public FollowPawnInfo AttachFollowPawnInfo(Pawn pawn)
         {
-            FollowName followName = followNamePool.Get<FollowName>();
-            followName.SetTarget(pawn.nameAnchor);
-            followName.SetName(name);
-            followName.Show();
-            return followName;
+            FollowPawnInfo followPawnInfo = followPawnInfoPool.Get<FollowPawnInfo>();
+            followPawnInfo.SetTarget(pawn.nameAnchor);
+            followPawnInfo.Show();
+            return followPawnInfo;
         }
 
         /// <summary>
@@ -49,18 +47,6 @@ namespace Game
             followSpeechBubble.SetText(text);
             followSpeechBubble.Show();
             return followSpeechBubble;
-        }
-
-        /// <summary>
-        /// 체력 HUD를 풀에서 가져와 Pawn의 체력바 앵커에 연결
-        /// </summary>
-        public FollowHealthBar AttachFollowHealthBar(Pawn pawn)
-        {
-            FollowHealthBar followHealthBar = followHealthBarPool.Get<FollowHealthBar>();
-            followHealthBar.SetTarget(pawn.healthBarAnchor);
-            followHealthBar.SetPawn(pawn);
-            followHealthBar.Show();
-            return followHealthBar;
         }
     }
 }

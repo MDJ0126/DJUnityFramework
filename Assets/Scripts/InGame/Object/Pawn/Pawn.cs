@@ -39,8 +39,7 @@ namespace Game
         protected override void OnEnable()
         {
             base.OnEnable();
-            followHUDs.Add(HUDManager.Instance.AttachFollowName(this, Name));
-            followHUDs.Add(HUDManager.Instance.AttachFollowHealthBar(this));
+            followHUDs.Add(HUDManager.Instance.AttachFollowPawnInfo(this));
         }
         protected override void OnDisable()
         {

@@ -4,12 +4,15 @@ public abstract class FollowHUD : MonoBehaviour
 {
     #region Inspector
 
-    public bool followCameraSize = true;
+    [SerializeField] private GameObject root;
+    [SerializeField] private bool _isFollowCameraSize = true;
+    [SerializeField] private float shrinkStartDistance = 5f;
+    [SerializeField] private float hideDistance = 20f;
 
     #endregion
 
     private Transform _transform = null;
-    public Transform MyTransform
+    public Transform Transform
     {
         get
         {
@@ -68,9 +71,38 @@ public abstract class FollowHUD : MonoBehaviour
         Vector3 targetPos = _targetCamera.WorldToScreenPoint(target.position);
 
         // UI의 위치를 변경해준다.
-        this.MyTransform.position = targetPos + _offset;
+        Transform.position = targetPos + _offset;
+
+        // HUD 사이즈 업데이트
+        UpdateHUDSize(targetPos.z);
 
         if (!target.gameObject.activeSelf) Hide();
+    }
+
+    /// <summary>
+    /// HUD 사이즈 업데이트
+    /// </summary>
+    private void UpdateHUDSize(float depth)
+    {
+        if (!_isFollowCameraSize)
+        {
+            Transform.localScale = Vector3.one;
+            return;
+        }
+
+        float distance = Vector3.Distance(
+            target.position, _targetCamera.transform.position);
+
+        // 숨김 거리는 월드 거리로 판정하고, 축소는 원근 투영의 깊이 비율을 따른다.
+        // GameObject를 비활성화하면 추적이 중단되므로 크기만 0으로 만든다.
+        if (depth <= 0f || distance >= hideDistance)
+        {
+            Transform.localScale = Vector3.zero;
+            return;
+        }
+
+        float scale = _targetCamera.orthographic ? 1f : Mathf.Max(0.001f, shrinkStartDistance) / depth;
+        Transform.localScale = Vector3.one * scale;
     }
 
     /// <summary>
