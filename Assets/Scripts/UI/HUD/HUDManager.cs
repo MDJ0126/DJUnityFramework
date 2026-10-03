@@ -32,7 +32,7 @@ namespace Game
         public FollowPawnInfo AttachFollowPawnInfo(Pawn pawn)
         {
             FollowPawnInfo followPawnInfo = followPawnInfoPool.Get<FollowPawnInfo>();
-            followPawnInfo.SetTarget(pawn.nameAnchor);
+            followPawnInfo.SetTarget(pawn.PawnInfoAnchor);
             followPawnInfo.Show();
             return followPawnInfo;
         }

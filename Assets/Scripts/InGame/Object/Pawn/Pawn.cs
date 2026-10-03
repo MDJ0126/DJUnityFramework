@@ -7,9 +7,8 @@ namespace Game
     {
         #region Inspector
 
-        public WidgetAnchor nameAnchor;
+        public WidgetAnchor PawnInfoAnchor;
         public WidgetAnchor balloonAnchor;
-        public WidgetAnchor healthBarAnchor;
 
         #endregion
 

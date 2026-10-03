@@ -84,14 +84,22 @@ public abstract class FollowHUD : MonoBehaviour
     /// </summary>
     private void UpdateHUDSize(float depth)
     {
+        // 카메라에서 보이지 않는 오브젝트인 경우에는 그리지 않는다.
+        bool isBlocked = Physics.Linecast(_targetCamera.transform.position, target.position, LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore);
+        if (isBlocked)
+        {
+            Transform.localScale = Vector3.zero;
+            return;
+        }
+
+        // 원근감 표현 안 하는 경우
         if (!_isFollowCameraSize)
         {
             Transform.localScale = Vector3.one;
             return;
         }
 
-        float distance = Vector3.Distance(
-            target.position, _targetCamera.transform.position);
+        float distance = Vector3.Distance(target.position, _targetCamera.transform.position);
 
         // 숨김 거리는 월드 거리로 판정하고, 축소는 원근 투영의 깊이 비율을 따른다.
         // GameObject를 비활성화하면 추적이 중단되므로 크기만 0으로 만든다.

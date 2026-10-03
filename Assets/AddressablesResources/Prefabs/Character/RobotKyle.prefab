@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 5302650338980133166}
   - component: {fileID: 5044493540828683380}
   m_Layer: 0
-  m_Name: NameAnchor
+  m_Name: PawnInfoAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -430,50 +430,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Weight: 1
   m_Effectors: []
---- !u!1 &7529329448296901483
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3769072390420180160}
-  - component: {fileID: 2822149409002437330}
-  m_Layer: 0
-  m_Name: HealthAnchor
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3769072390420180160
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7529329448296901483}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8903744130082686389}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2822149409002437330
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7529329448296901483}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e56e1bd9482900241ae54dacbd28f6ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8922402000037536133
 GameObject:
   m_ObjectHideFlags: 0
@@ -553,7 +509,6 @@ Transform:
   - {fileID: 1084692116306545463}
   - {fileID: 6220274498013237056}
   - {fileID: 5417606405649275308}
-  - {fileID: 3769072390420180160}
   - {fileID: 5302650338980133166}
   - {fileID: 5806061690804521730}
   m_Father: {fileID: 0}
@@ -570,9 +525,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f37b3ff61ef67b440a38b80fc20a656e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameAnchor: {fileID: 5044493540828683380}
+  PawnInfoAnchor: {fileID: 5044493540828683380}
   balloonAnchor: {fileID: 9096739266768584353}
-  healthBarAnchor: {fileID: 2822149409002437330}
   aimTarget:
     target: {fileID: 5417606405649275308}
     AimRig: {fileID: 4534822157157772568}
