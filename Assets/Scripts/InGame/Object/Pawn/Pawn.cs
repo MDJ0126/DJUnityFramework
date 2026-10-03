@@ -13,16 +13,14 @@ namespace Game
 
         #endregion
 
-        public StatusInfo StatusInfo = new();
+        public virtual string Name => nameof(Pawn);
+        public StatusInfo Status { get; private set; } = new();
         public SkillManager SkillManager { get; private set; } = new();
         public BuffManager BuffManager { get; private set; } = new();
         public Movement Movement { get; private set; }
         public PawnAnimationController PawnAnimationController { get; private set; }
         protected List<FollowHUD> followHUDs = new();
 
-        /// <summary>
-        /// Pawn이 사용할 이동 및 애니메이션 컴포넌트 캐싱
-        /// </summary>
         protected override void Awake()
         {
             base.Awake();
@@ -31,9 +29,6 @@ namespace Game
             Initalize();
         }
 
-        /// <summary>
-        /// 스킬과 버프 관리자에 소유 Pawn 설정
-        /// </summary>
         protected override void Start()
         {
             base.Start();
@@ -41,9 +36,21 @@ namespace Game
             BuffManager.SetOwner(this);
         }
 
-        /// <summary>
-        /// 스킬과 버프의 시간 기반 로직 갱신
-        /// </summary>
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            followHUDs.Add(HUDManager.Instance.AttachFollowName(this, Name));
+            followHUDs.Add(HUDManager.Instance.AttachFollowHealthBar(this));
+        }
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            if (HUDManager.IsLive)
+            {
+                HUDManager.Instance.DetachFollowHUD(followHUDs);
+            }
+        }
+
         protected override void LateUpdate()
         {
             base.LateUpdate();

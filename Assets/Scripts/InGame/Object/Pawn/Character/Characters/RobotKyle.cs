@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Game
 {
     public class RobotKyle : Character
@@ -10,6 +8,7 @@ namespace Game
         public Socket rightHandleSocket;
 
         #endregion
+        public override string Name => nameof(RobotKyle);
 
         public RobotKyleAnimationController RobotKyleAnimationController { get; private set; }
 

@@ -188,7 +188,7 @@ Transform:
   m_GameObject: {fileID: 2788819992735806377}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 2.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -456,7 +456,7 @@ Transform:
   m_GameObject: {fileID: 7529329448296901483}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.2, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -553,9 +553,9 @@ Transform:
   - {fileID: 1084692116306545463}
   - {fileID: 6220274498013237056}
   - {fileID: 5417606405649275308}
+  - {fileID: 3769072390420180160}
   - {fileID: 5302650338980133166}
   - {fileID: 5806061690804521730}
-  - {fileID: 3769072390420180160}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7321475587468510620
@@ -592,6 +592,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2187480de068684c8ac7aec1bc4e410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isMoveEnable: 1
   maxSpeed: 10
   walkMaxSpeed: 3
   acceleration: 100
