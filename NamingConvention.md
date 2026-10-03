@@ -1,27 +1,7 @@
 # 프로젝트 네이밍 컨벤션
-- 클래스 "파스칼 표기법" => ClassName
 
-- private 변수 "_카멜 표기법" => _variable
+네이밍 규칙의 원본은 [프로젝트 다큐먼트의 네이밍 문서](docs/documentation/02-naming.md)입니다.
 
-- public 변수 "카멜 표기법" => variable
+클래스·필드·프로퍼티·함수·인터페이스·enum·상수 규칙과 예제, 기존 코드의 예외를 해당 문서에서 수정합니다.
 
-- boolean 변수 "is, Can + 카멜 표기법" => isAction, CanSoldout
-
-- 프로퍼티 "파스칼 표기법" => Variable
-
-- 함수명 "파스칼 표기법" => MethodName()
-
-- Interface "i + 파스칼 표기법" => iManager, iData
-
-- Enum "e + 파스칼 표기법" => eState, eAnimation
-
-- 상수 "대문자 표기" => CHARACTER_INDEX, HEIGHT, INTERVAL
-
-# 표기법 정보
-- 카멜 표기법: 첫 번째 단어는 소문자로 시작하고, 이후의 각 단어의 첫 글자는 대문자로 작성
-
-- 파스칼 표기법: 첫 번째 단어는 대문자로 시작하고, 이후의 각 단어의 첫 글자는 대문자로 작성
-
-- 스네이크 표기법: 파일, 변수, 함수 등 대상의 이름의 띄어쓰기를 언더바(_)로 작성
-
-- 헝가리안 표기법: 변수 및 함수의 인자 이름 앞에 데이터 타입을 명시하여 작성
+전체 다큐먼트은 [index.html](docs/documentation/index.html)을 브라우저에서 열어 볼 수 있습니다.

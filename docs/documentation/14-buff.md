@@ -1,0 +1,19 @@
+# Buff 만들기
+
+1. Buff를 상속하고 효과·수명·중복 정책을 정합니다.
+2. 필요할 때 UpdateTick을 override합니다.
+3. 관리자 소유자 설정 후 AddBuff로 등록합니다.
+4. 갱신·종료·제거·구독 해제를 확인합니다.
+
+위치: Assets/Scripts/InGame/Buff. 생성 팩토리를 쓰면 eBuffType과 GameUtils.CreateBuff도 수정합니다.
+
+```csharp
+/// <summary>
+/// 버프 확장용 뼈대를 제공한다.
+/// </summary>
+public class ExampleBuff : Buff
+{
+}
+```
+
+현재 부모는 duration >= time으로 종료합니다. foreach 중 제거와 부모 처리 후 효과 실행도 확인해야 합니다. 뼈대에는 효과가 없고 실제 실행은 미확인입니다.
